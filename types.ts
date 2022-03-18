@@ -14,9 +14,9 @@
  */
 
 type User = {
-  _id: Number;
-  email: String;
-  displayName: String;
+  _id: number;
+  email: string;
+  displayName: string;
   userTVInfo: [UserTVShow];
 };
 
@@ -24,9 +24,9 @@ type User = {
  * user creation / login
  */
 type DBUser = {
-  email: String;
-  displayName: String;
-  password: String;
+  email: string;
+  displayName: string;
+  password: string;
 };
 
 /**
@@ -35,22 +35,22 @@ type DBUser = {
  */
 
 type UserTVShow = {
-  TMDB_show_id: Number;
-  name: String;
-  poster_path: String;
-  isCompleted: Boolean;
-  episodeIdUpTo: Number;
-  episodeCodeUpTo: String;
-  episodesWatchedSoFar: Number;
+  TMDB_show_id: number;
+  name: string;
+  poster_path: string;
+  isCompleted: boolean;
+  episodeIdUpTo: number;
+  episodeCodeUpTo: string;
+  episodesWatchedSoFar: number;
 };
 
 /////////////////////// ADD SHOW
 
 type MovieSnippet = {
-  name: String;
-  TMDB_show_id: Number;
-  poster_path?: String;
-  first_air_date: String;
+  name: string;
+  TMDB_show_id: number;
+  poster_path?: string;
+  first_air_date: string;
 };
 
 /**
@@ -58,42 +58,42 @@ type MovieSnippet = {
  */
 
 type Season = {
-  TMDB_season_id: Number;
-  numberOfEpisodes: Number;
+  TMDB_season_id: number;
+  numberOfEpisodes: number;
   episodes: Episode[];
 };
 
 type Episode = {
-  name: String;
-  TMDB_episode_id: Number;
-  season_number: Number;
-  episode_number: Number;
+  name: string;
+  TMDB_episode_id: number;
+  season_number: number;
+  episode_number: number;
 };
 
 type TVShow = {
-  TMDB_show_id: Number;
-  name: String;
-  first_air_date: String;
-  last_air_date: String;
-  homepage: String;
-  tagline: String;
-  backdrop_path: String;
-  poster_path: String;
-  created_by: String;
-  next_episode_to_air: String;
-  number_of_episodes: Number;
-  number_of_seasons: Number;
-  percentComplete: Number;
+  TMDB_show_id: number;
+  name: string;
+  first_air_date: string;
+  last_air_date: string;
+  homepage: string;
+  tagline: string;
+  backdrop_path: string;
+  poster_path: string;
+  created_by: string;
+  next_episode_to_air: string;
+  number_of_episodes: number;
+  number_of_seasons: number;
+  percentComplete: number;
   seasons: Array<Season>;
   externalIds: ExternalIds;
 };
 
 type ExternalIds = {
-  imdb_id?: String;
-  facebook_id?: String;
-  instagram_id?: String;
-  twitter_id?: String;
-  wikipediaId?: String;
+  imdb_id?: string;
+  facebook_id?: string;
+  instagram_id?: string;
+  twitter_id?: string;
+  wikipediaId?: string;
 };
 
 /**
@@ -101,30 +101,30 @@ type ExternalIds = {
  */
 
 type Topic = {
-  _id: Number;
-  TMDB_show_id: Number;
-  TMDB_episode_id: Number;
-  authorUserId: Number;
-  title: String;
-  body: String;
+  _id: number;
+  TMDB_show_id: number;
+  TMDB_episode_id: number;
+  authorUserId: number;
+  title: string;
+  body: string;
   date: Date;
-  voteScore: Number;
+  voteScore: number;
 };
 
 type Reply = {
-  _id: Number;
-  topicId: Number;
-  authorUserId: Number;
-  replierEpisodeUpTo: Number;
-  body: String;
+  _id: number;
+  topicId: number;
+  authorUserId: number;
+  replierEpisodeUpTo: number;
+  body: string;
   date: Date;
 };
 
 type Report = {
-  reporterId: Number;
-  offendingUserId: Number;
-  offenceType: String;
+  reporterId: number;
+  offendingUserId: number;
+  offenceType: string;
   topicOrReply: "Topic" | "Reply";
-  itemId: Number;
+  itemId: number;
   date: Date;
 };
