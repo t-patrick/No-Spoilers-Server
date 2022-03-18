@@ -10,14 +10,14 @@
 
 //////////////////////////////////////// HOMEPAGE
 /** Basic User type
- *  - for front end API
+ *  - combines DBUser and UserTVShow from db.
  */
 
 type User = {
   _id: number;
   email: string;
   displayName: string;
-  userTVInfo: [UserTVShow];
+  userTVInfo: Array<UserTVShow>;
 };
 
 /**
@@ -27,14 +27,17 @@ type DBUser = {
   email: string;
   displayName: string;
   password: string;
+  avatar: string;
 };
 
 /**
  * Details about the users progress with the Show,
- * + Presentational details for the Home page.
+ * and presentational details for the Home page.
+ * + userId refers to DBUser's _id
  */
 
 type UserTVShow = {
+  userId?: string;
   TMDB_show_id: number;
   name: string;
   poster_path: string;
@@ -46,7 +49,7 @@ type UserTVShow = {
 
 /////////////////////// ADD SHOW
 
-type MovieSnippet = {
+type TVShowSnippet = {
   name: string;
   TMDB_show_id: number;
   poster_path?: string;
@@ -94,6 +97,7 @@ type ExternalIds = {
   instagram_id?: string;
   twitter_id?: string;
   wikipediaId?: string;
+  homepage?: string;
 };
 
 /**
@@ -124,7 +128,7 @@ type Report = {
   reporterId: number;
   offendingUserId: number;
   offenceType: string;
-  topicOrReply: "Topic" | "Reply";
+  topicOrReply: 'Topic' | 'Reply';
   itemId: number;
   date: Date;
 };
