@@ -1,11 +1,11 @@
-/* 
- 
+/*
+
  Notes
- 
+
  camelCase for data we have created or stored in our database
 
  under_scores for data fields we have received from external APIs.
- 
+
  */
 
 //////////////////////////////////////// HOMEPAGE
@@ -27,6 +27,7 @@ type DBUser = {
   email: string;
   displayName: string;
   password: string;
+  avatar: string;
 };
 
 /**
@@ -46,7 +47,7 @@ type UserTVShow = {
 
 /////////////////////// ADD SHOW
 
-type MovieSnippet = {
+type TVShowSnippet = {
   name: string;
   TMDB_show_id: number;
   poster_path?: string;
@@ -70,6 +71,10 @@ type Episode = {
   episode_number: number;
 };
 
+interface EpisodefromAPI extends Episode {
+  id: number
+};
+
 type TVShow = {
   TMDB_show_id: number;
   name: string;
@@ -86,6 +91,7 @@ type TVShow = {
   percentComplete: number;
   seasons: Array<Season>;
   externalIds: ExternalIds;
+  overview: string;
 };
 
 type ExternalIds = {
@@ -94,6 +100,7 @@ type ExternalIds = {
   instagram_id?: string;
   twitter_id?: string;
   wikipediaId?: string;
+  homepage?: string;
 };
 
 /**
