@@ -18,6 +18,6 @@ const dbUserSchema = new mongoose.Schema<DBUser>({
   avatar: String,
 });
 
-const DBUser = mongoose.model<DBUser>('User', dbUserSchema);
+const User = mongoose.model<DBUser>('User', dbUserSchema);
 
-export default DBUser;
+export default User;

@@ -89,6 +89,7 @@ type TVShow = {
   percentComplete: number;
   seasons: Array<Season>;
   externalIds: ExternalIds;
+  overview: string;
 };
 
 type ExternalIds = {

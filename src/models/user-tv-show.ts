@@ -11,7 +11,6 @@ const userTVShowSchema = new mongoose.Schema<UserTVShow>({
   episodesWatchedSoFar: Number,
 });
 
-
 const UserTVShow = mongoose.model<UserTVShow>('UserTVShow', userTVShowSchema);
 
 export default UserTVShow;
