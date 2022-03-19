@@ -58,6 +58,10 @@ const externalIdReformat = (
 	return externalUrls;
 };
 
+// const getNextEpisodeDate = async (req: Request, res: Response): Promise<Date> => {
+
+// }
+
 /*
  * function to load wayback occuring on load of show page
  */

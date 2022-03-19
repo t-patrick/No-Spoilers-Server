@@ -3,7 +3,7 @@ import mongoose from '.';
 const userTVShowSchema = new mongoose.Schema<UserTVShow>({
   userId: mongoose.SchemaTypes.ObjectId,
   TMDB_show_id: Number,
-  name: Number,
+  name: String,
   poster_path: String,
   isCompleted: Boolean,
   episodeIdUpTo: Number,

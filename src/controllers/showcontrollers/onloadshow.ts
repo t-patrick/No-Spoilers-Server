@@ -73,7 +73,7 @@ const calculatePercentComplete = async (
 
 export const onLoadShow = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.body._id;
+		const userId = req.body._id;
     const TMDB_show_id = Number(req.params.TMDB_show_Id);
     const { data } = await axios.get(
       `${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`

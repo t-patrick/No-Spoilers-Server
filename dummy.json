@@ -3,12 +3,14 @@
     "_id": "userNoData",
     "email": "useremail1",
     "displayName": "usernodata",
+		"password": "asdsadfasfds",
     "userTVInfo": []
   },
 	{
 		"_id": "userWithData",
 		"email": "useremail2",
 		"displayName": "userwithdata",
+		"password": "asdsadfasfds",
 		"userTVInfo": [
 			{
 				"userId": "userWithData",
