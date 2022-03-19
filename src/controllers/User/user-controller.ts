@@ -1,30 +1,27 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { createDBUser } from './db-user-interface';
+import { createDBUser, loginCheck } from './db-user-interface';
 
-const createUser = async (req: Request, res: Response) => {
+export const createUser = async (req: Request, res: Response) => {
   try {
     const user = await createDBUser(req.body);
 
-    const token = jwt.sign(
-      { id: req.body.id },
-      process.env.SECRET_KEY as string
-    );
-
-    const response = {
-      user: user,
-      token: token,
-    };
-
-    res.status(201).send(response);
+    res.status(201).send(user);
   } catch (e: any) {
     console.error(e.toString());
     res.status(500).send(e.toString());
   }
 };
 
-// const login = async (req: Request, res: Response) => {
-//   try {
-//     cosnt
-//   }
-// }
+export const login = async (req: Request, res: Response) => {
+  try {
+    const user = req.body;
+
+    const data = await loginCheck(user);
+
+    res.status(200).send(data);
+  } catch (e: any) {
+    console.error(e.toString());
+    res.status(500).send(e.toString());
+  }
+};

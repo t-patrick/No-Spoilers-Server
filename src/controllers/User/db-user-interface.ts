@@ -8,7 +8,9 @@ export const loginCheck = async (user: DBUser) => {
     const userFromDB: DBUser = (await User.findOne({
       email: user.email,
     })) as DBUser;
+
     const match = await bcrypt.compare(user.password, userFromDB.password);
+
     if (match) {
       return userFromDB;
     } else {
