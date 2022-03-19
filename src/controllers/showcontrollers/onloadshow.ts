@@ -99,7 +99,7 @@ const externalIdReformat = (externalIds: ExternalIds | undefined, showName: stri
 export const onLoad = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const userId: number = req.body._id;
-		const TMDB_show_id: number = req.body.TMDB_show_id;
+		const TMDB_show_id: number = Number(req.params.TMDB_show_Id);
 		const { data } = await axios.get(`${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`);
 		const tvShowSeasons: Season[] = []
 		for (let i = 0; i < data.seasons.length; i++) {
@@ -130,6 +130,8 @@ export const onLoad = async (req: Request, res: Response): Promise<void> => {
 			externalIds: externalUrls,
 			overview: data.overview
 		}
+		res.status(200);
+		res.send(tvShow);
 	} catch (e) {
 		console.error(e, "onLoad is failing");
 		res.status(500);
