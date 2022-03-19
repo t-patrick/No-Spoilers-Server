@@ -44,6 +44,7 @@ type UserTVShow = {
   isCompleted: boolean;
   episodeIdUpTo: number;
   episodeCodeUpTo: string;
+  episodeCodeNext: string;
   episodesWatchedSoFar: number;
 };
 
@@ -75,6 +76,7 @@ type Episode = {
 
 interface EpisodefromAPI extends Episode {
   id: number
+  air_date?: string
 };
 
 type TVShow = {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 dotenv.config();
+import UserTVShow from '../../models/user-tv-show';
 const apiUrl = 'https://api.themoviedb.org/3/';
 const APIKEY = process.env.API_KEY;
 
@@ -58,9 +59,29 @@ const externalIdReformat = (
 	return externalUrls;
 };
 
-// const getNextEpisodeDate = async (req: Request, res: Response): Promise<Date> => {
+/*
+ * function to get next episode date for a user's tv show
+ */
 
-// }
+const getNextEpisodeDate = async (
+	userId: number,
+	showId: number): Promise<string | undefined> => {
+	try {
+		const tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: showId });
+		if (tvShow) {
+			const nextEpisodeCode = tvShow.episodeCodeNext
+			if (nextEpisodeCode === "") return "";
+			const nextEpisodeCodeArray: string[] = nextEpisodeCode.slice(1).split('e');
+			const seasonNumber = Number(nextEpisodeCodeArray[0]);
+			const episodeNumber = Number(nextEpisodeCodeArray[1]);
+			const { data } = await axios.get(`${apiUrl}tv/${showId}/season/${seasonNumber}/episode/${episodeNumber}?api_key=${APIKEY}`);
+			return data.air_date;
+		} else return;
+	} catch (e) {
+		console.error(e, 'getNextEpisodeDate is failing');
+		return;
+	}
+}
 
 /*
  * function to load wayback occuring on load of show page
@@ -73,16 +94,20 @@ export const onLoadWaybackUrls = async (req: Request, res: Response): Promise<vo
 		const { data } = await axios.get(
 			`${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
 		);
-		const externalIds: ExternalIds | undefined = await externalIdApiCall(
-			TMDB_show_id
-		);
-		const externalUrls: ExternalIds = externalIdReformat(
-			externalIds,
-			data.name,
-			data.homepage
-		);
+		const nextEpisodeDate: string | undefined = await getNextEpisodeDate(userId, TMDB_show_id);
+		if (nextEpisodeDate) {
+			const externalIds: ExternalIds | undefined = await externalIdApiCall(
+				TMDB_show_id
+			);
+			const externalUrls: ExternalIds = externalIdReformat(
+				externalIds,
+				data.name,
+				data.homepage
+			);
+		}
+
 		res.status(200);
-		res.send(externalUrls);
+		res.send();
 	} catch (e) {
 		console.error(e, 'onLoadWaybackUrls is failing');
 		res.status(500);

@@ -20,6 +20,7 @@
 				"isCompleted": "no",
 				"episodeIdUpTo": 63077,
         "episodeCodeUpTo": "s3e1",
+				"episodeCodeNext": "s3e2",
 				"episodesWatchedSoFar": 21
 			},
 			{
@@ -30,6 +31,7 @@
 				"isCompleted": "yes",
 				"episodeIdUpTo": 62161,
 				"episodeCodeUpTo": "s5e16",
+				"episodeCodeNext": "",
 				"episodesWatchedSoFar": 62
 			},
 			{
@@ -40,6 +42,7 @@
 				"isCompleted": "no",
 				"episodeIdUpTo": 0,
 				"episodeCodeUpTo": "",
+				"episodeCodeNext": "s1e1",
 				"episodesWatchedSoFar": 0
 			}
 		]

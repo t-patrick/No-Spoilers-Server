@@ -8,6 +8,7 @@ const userTVShowSchema = new mongoose.Schema<UserTVShow>({
   isCompleted: Boolean,
   episodeIdUpTo: Number,
   episodeCodeUpTo: String,
+  episodeCodeNext: String, 
   episodesWatchedSoFar: Number,
 });
 
