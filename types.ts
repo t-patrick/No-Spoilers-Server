@@ -1,11 +1,11 @@
-/* 
- 
+/*
+
  Notes
- 
+
  camelCase for data we have created or stored in our database
 
  under_scores for data fields we have received from external APIs.
- 
+
  */
 
 //////////////////////////////////////// HOMEPAGE
@@ -71,6 +71,10 @@ type Episode = {
   TMDB_episode_id: number;
   season_number: number;
   episode_number: number;
+};
+
+interface EpisodefromAPI extends Episode {
+  id: number
 };
 
 type TVShow = {
