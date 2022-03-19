@@ -6,6 +6,9 @@ const apiUrl = 'https://api.themoviedb.org/3/';
 const APIKEY = process.env.API_KEY;
 
 
+/*
+* function to reformat episode information from API ro required episode type
+*/
 
 const episodeReformat = (episodes: EpisodefromAPI[]): Episode[] => {
 	const newEpisodeArray: Episode[] = []
@@ -20,6 +23,10 @@ const episodeReformat = (episodes: EpisodefromAPI[]): Episode[] => {
 	}
 	return newEpisodeArray;
 }
+
+/*
+* function to call season data from API and return required season type
+*/
 
 const seasonApiCall = async (showId: number, seasonNumber: number): Promise<Season | undefined> => {
 	try {
@@ -38,6 +45,10 @@ const seasonApiCall = async (showId: number, seasonNumber: number): Promise<Seas
 	}
 };
 
+/*
+* function to call external ids from API and return required properties
+*/
+
 const externalIdApiCall = async (showId: number): Promise<ExternalIds | undefined> => {
 	try {
 		const { data } = await axios.get(`${apiUrl}tv/${showId}/external_ids?api_key=${APIKEY}`);
@@ -46,9 +57,8 @@ const externalIdApiCall = async (showId: number): Promise<ExternalIds | undefine
 			facebook_id: data.facebook_id,
 			instagram_id: data.instagram_id,
 			twitter_id: data.twitter_id,
-			wikipediaId: string,
-			homepage: string,
 		}
+		return externalIds;
 	}
 	catch (e) {
 		console.error(e, "externalIdApiCall is failing");
@@ -57,7 +67,33 @@ const externalIdApiCall = async (showId: number): Promise<ExternalIds | undefine
 };
 
 /*
-function occurs on load of show page
+* function to convert external IDs to required urls
+*/
+
+const externalIdReformat = (externalIds: ExternalIds | undefined, showName: string, homepage: string): ExternalIds => {
+	const wikiName = showName.split(' ').join('_')
+	let externalUrls: ExternalIds;
+	if (externalIds) {
+		externalUrls = {
+			imdb_id: `https://www.imdb.com/title/${externalIds.imdb_id}/`,
+			facebook_id: `https://www.facebook.com/${externalIds.facebook_id}/`,
+			instagram_id: `https://www.instagram.com/${externalIds.instagram_id}/`,
+			twitter_id: `https://twitter.com/${externalIds.twitter_id}`,
+			wikipediaId: `https://en.wikipedia.org/wiki/${wikiName}`,
+			homepage: homepage
+		}
+	}
+	else {
+		externalUrls = {
+			wikipediaId: `https://en.wikipedia.org/wiki/${wikiName}`,
+			homepage: homepage
+		}
+	}
+	return externalUrls;
+};
+
+/*
+* function occuring on load of show page
 */
 
 export const onLoad = async (req: Request, res: Response): Promise<void> => {
@@ -74,7 +110,8 @@ export const onLoad = async (req: Request, res: Response): Promise<void> => {
 				}
 			}
 		};
-		const externalIds: ExternalIds = externalIdApiCall(TMDB_show_id);
+		const externalIds: ExternalIds | undefined = await externalIdApiCall(TMDB_show_id);
+		const externalUrls: ExternalIds = externalIdReformat(externalIds, data.name, data.homepage)
 		const tvShow: TVShow = {
 			TMDB_show_id: data.id,
 			name: data.name,
@@ -90,11 +127,11 @@ export const onLoad = async (req: Request, res: Response): Promise<void> => {
 			number_of_seasons: data.number_of_seasons,
 			percentComplete: 0,
 			seasons: tvShowSeasons,
-			externalIds: externalIds,
+			externalIds: externalUrls,
 			overview: data.overview
 		}
 	} catch (e) {
 		console.error(e, "onLoad is failing");
 		res.status(500);
-  }
+	}
 };
