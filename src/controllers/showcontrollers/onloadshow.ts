@@ -49,23 +49,21 @@ const seasonApiCall = async (
   }
 };
 
-const filterUserTVShow = async (
+const calculatePercentComplete = async (
 	userId: number,
-	showId: number
-): Promise<UserTVShow | undefined> => {
+	showId: number,
+	number_of_episodes: number
+): Promise<number> => {
 	try {
-		const tvShow = await UserTVShow.findOne({ userId: userId, TMDB_show_id: showId });
-
-		const newEpisodeArray: Episode[] = episodeReformat(data.episodes);
-		const season: Season = {
-			TMDB_season_id: data.id,
-			numberOfEpisodes: data.episodes.length,
-			episodes: newEpisodeArray,
-		};
-		return season;
+		let percentComplete: number;
+		const tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: showId });
+		if (tvShow) {
+			percentComplete = (tvShow.episodesWatchedSoFar / number_of_episodes) * 100;
+		} else percentComplete = 0;
+		return percentComplete;
 	} catch (e) {
-		console.error(e, 'filterUserTVShow is failing');
-		return;
+		console.error(e, 'calculatePercentComplete is failing');
+		return 0;
 	}
 };
 
@@ -79,7 +77,8 @@ export const onLoadShow = async (req: Request, res: Response): Promise<void> => 
     const TMDB_show_id = Number(req.params.TMDB_show_Id);
     const { data } = await axios.get(
       `${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
-    );
+		);
+		const percentComplete: number = await calculatePercentComplete(userId, TMDB_show_id, data.number_of_episodes);
     const tvShowSeasons: Season[] = [];
     for (let i = 0; i < data.seasons.length; i++) {
       if (data.seasons[i].name !== 'Specials') {
@@ -105,7 +104,7 @@ export const onLoadShow = async (req: Request, res: Response): Promise<void> => 
       next_episode_to_air: data.next_episode_to_air,
       number_of_episodes: data.number_of_episodes,
       number_of_seasons: data.number_of_seasons,
-      percentComplete: 0,
+      percentComplete: percentComplete,
       seasons: tvShowSeasons,
       overview: data.overview,
     };
