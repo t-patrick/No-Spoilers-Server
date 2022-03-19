@@ -92,7 +92,6 @@ type TVShow = {
   number_of_seasons: number;
   percentComplete: number;
   seasons: Array<Season>;
-  externalIds: ExternalIds;
   overview: string;
 };
 

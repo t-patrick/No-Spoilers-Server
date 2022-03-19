@@ -1,0 +1,45 @@
+[
+  {
+    "_id": "userNoData",
+    "email": "useremail1",
+    "displayName": "usernodata",
+    "userTVInfo": []
+  },
+	{
+		"_id": "userWithData",
+		"email": "useremail2",
+		"displayName": "userwithdata",
+		"userTVInfo": [
+			{
+				"userId": "userWithData",
+				"TMDB_show_id": 1399,
+				"name": "Game of Thrones",
+				"poster_path": "/u3bZgnGQ9T01sWNhyveQz0wH0Hl.jpg",
+				"isCompleted": "no",
+				"episodeIdUpTo": 63077,
+        "episodeCodeUpTo": "s3e1",
+				"episodesWatchedSoFar": 21
+			},
+			{
+				"userId": "userWithData",
+				"TMDB_show_id": 1396,
+				"name": "Breaking Bad",
+				"poster_path": "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+				"isCompleted": "yes",
+				"episodeIdUpTo": 62161,
+				"episodeCodeUpTo": "s5e16",
+				"episodesWatchedSoFar": 62
+			},
+			{
+				"userId": "userWithData",
+				"TMDB_show_id": 1395,
+				"name": "Gossip Girl",
+				"poster_path": "/mRvSUuU1VQQkZZ578jKJpcUCuL8.jpg",
+				"isCompleted": "no",
+				"episodeIdUpTo": 0,
+				"episodeCodeUpTo": "",
+				"episodesWatchedSoFar": 0
+			}
+		]
+	}
+]
