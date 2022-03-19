@@ -10,9 +10,7 @@ const APIKEY = process.env.API_KEY;
  * function to call external ids from API and return required properties
  */
 
-const externalIdApiCall = async (
-	showId: number
-): Promise<ExternalIds | undefined> => {
+const externalIdApiCall = async (	showId: number): Promise<ExternalIds | undefined> => {
 	try {
 		const { data } = await axios.get(
 			`${apiUrl}tv/${showId}/external_ids?api_key=${APIKEY}`
@@ -60,12 +58,26 @@ const externalIdReformat = (
 };
 
 /*
+ * function to convert external urls to wayback urls
+ */
+
+const externalUrlReformat = (	externalUrls: ExternalIds, nextEpisodeDate: string): ExternalIds => {
+		const waybackUrls: ExternalIds = {
+			imdb_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.imdb_id}&output=json&to=${nextEpisodeDate}`,
+			facebook_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.facebook_id}&output=json&to=${nextEpisodeDate}`,
+			instagram_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.instagram_id}&output=json&to=${nextEpisodeDate}`,
+			twitter_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.twitter_id}&output=json&to=${nextEpisodeDate}`,
+			wikipediaId: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.wikipediaId}&output=json&to=${nextEpisodeDate}`,
+			homepage: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.homepage}&output=json&to=${nextEpisodeDate}`
+		};
+	return waybackUrls;
+};
+
+/*
  * function to get next episode date for a user's tv show
  */
 
-const getNextEpisodeDate = async (
-	userId: number,
-	showId: number): Promise<string | undefined> => {
+const getNextEpisodeDate = async (	userId: number,	showId: number): Promise<string | undefined> => {
 	try {
 		const tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: showId });
 		if (tvShow) {
@@ -75,13 +87,38 @@ const getNextEpisodeDate = async (
 			const seasonNumber = Number(nextEpisodeCodeArray[0]);
 			const episodeNumber = Number(nextEpisodeCodeArray[1]);
 			const { data } = await axios.get(`${apiUrl}tv/${showId}/season/${seasonNumber}/episode/${episodeNumber}?api_key=${APIKEY}`);
-			return data.air_date;
+			const regex = /-/g;
+			const airDateNoHyphen: string = data.air_date.replace(regex, '');
+			return airDateNoHyphen;
 		} else return;
 	} catch (e) {
 		console.error(e, 'getNextEpisodeDate is failing');
 		return;
 	}
 }
+
+/*
+ * function to call wayback API and access final array
+ */
+
+const waybackApiCalls = async (	waybackUrls: ExternalIds ): Promise<ExternalIds | undefined> => {
+	try {
+		const finalUrls: ExternalIds = {};
+		const { data } = await axios.get(
+			`${apiUrl}tv/${showId}/external_ids?api_key=${APIKEY}`
+		);
+		const externalIds: ExternalIds = {
+			imdb_id: data.imdb_id,
+			facebook_id: data.facebook_id,
+			instagram_id: data.instagram_id,
+			twitter_id: data.twitter_id,
+		};
+		return externalIds;
+	} catch (e) {
+		console.error(e, 'waybackApiCalls is failing');
+		return;
+	}
+};
 
 /*
  * function to load wayback occuring on load of show page
@@ -104,10 +141,13 @@ export const onLoadWaybackUrls = async (req: Request, res: Response): Promise<vo
 				data.name,
 				data.homepage
 			);
+			const waybackUrls: ExternalIds = externalUrlReformat(externalUrls, nextEpisodeDate);
+			const finalUrls: ExternalIds = waybackApiCalls(waybackUrls);
+			res.status(200);
+			res.send(finalUrls);
 		}
 
-		res.status(200);
-		res.send();
+
 	} catch (e) {
 		console.error(e, 'onLoadWaybackUrls is failing');
 		res.status(500);
