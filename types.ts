@@ -75,9 +75,9 @@ type Episode = {
 };
 
 interface EpisodefromAPI extends Episode {
-  id: number
-  air_date?: string
-};
+  id: number;
+  air_date?: string;
+}
 
 type TVShow = {
   TMDB_show_id: number;

@@ -8,7 +8,6 @@ const dbUserSchema = new mongoose.Schema<DBUser>({
   },
   displayName: {
     type: String,
-    unique: true,
     required: true,
   },
   password: {

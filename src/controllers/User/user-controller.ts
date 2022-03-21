@@ -30,6 +30,7 @@ const onLoadHome = async (email: string): Promise<User | undefined> => {
 
 export const createUser = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const user = await createDBUser(req.body);
     const result = await onLoadHome(req.body.email);
     if (!result) {

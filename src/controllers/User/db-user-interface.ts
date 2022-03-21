@@ -26,6 +26,7 @@ export const loginCheck = async (user: DBUser) => {
 
 export const createDBUser = async (user: DBUser): Promise<DBUser | Error> => {
   const resp = await User.exists({ email: user.email });
+  console.log(resp);
   if (resp) throw new Error('email already exists');
 
   try {
@@ -45,10 +46,10 @@ export const createDBUser = async (user: DBUser): Promise<DBUser | Error> => {
     }
   } catch (e: any) {
     if (e.code === 11000) {
-      console.error('create new user failing');
+      console.error('Wrong mongo syntax', e);
     } else {
-      console.error('create new user failing');
+      console.error('Other database error', e);
     }
-    return new Error('create new user failed');
+    return new Error('Other database error');
   }
 };
