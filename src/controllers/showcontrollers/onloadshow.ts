@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as dotenv from 'dotenv';
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import UserTVShow from '../../models/user-tv-show';
 dotenv.config();
 const apiUrl = 'https://api.themoviedb.org/3/';
