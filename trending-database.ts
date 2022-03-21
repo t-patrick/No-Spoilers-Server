@@ -7,16 +7,16 @@ const apiUrl = 'https://api.themoviedb.org/3/';
 const APIKEY = process.env.API_KEY;
 mongoose.connect(`${process.env.DB_URL}${process.env.DB_NAME}`);
 
-const duplicateCheck = async (tvShow: TVShowSnippet): Promise<any> => {
-	try {
-		const duplicate = await TVShowSnippet.find({ name: tvShow.name });
-		if (duplicate) return duplicate;
-		else return undefined;
-	} catch (e) {
-		console.error(e, 'duplicateCheck is failing');
-		return;
-	}
-}
+// const duplicateCheck = async (tvShow: TVShowSnippet): Promise<any> => {
+// 	try {
+// 		const duplicate = await TVShowSnippet.find({ name: tvShow.name });
+// 		if (duplicate) return duplicate;
+// 		else return undefined;
+// 	} catch (e) {
+// 		console.error(e, 'duplicateCheck is failing');
+// 		return;
+// 	}
+// }
 
 export const trendDatabase = async (): Promise<void> => {
 	try {
@@ -30,10 +30,10 @@ export const trendDatabase = async (): Promise<void> => {
 					poster_path: tvShows[j].poster_path,
 					first_air_date: tvShows[j].first_air_date
 				}
-				const duplicate = duplicateCheck(tvShow);
-				if (!duplicate) {
+				// const duplicate = duplicateCheck(tvShow);
+				// if (!duplicate) {
 					await TVShowSnippet.create(tvShow);
-				}
+				// }
 			}
 		}
 		return;
