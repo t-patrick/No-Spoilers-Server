@@ -1,10 +1,7 @@
-import axios from 'axios';
-import * as dotenv from 'dotenv';
-import express, { Request, Response } from 'express';
-dotenv.config();
+import { Request, Response } from 'express';
+import UserTVShow from '../../models/user-tv-show';
 import User from '../../models/db-user';
-const apiUrl = 'https://api.themoviedb.org/3/';
-const APIKEY = process.env.API_KEY;
+
 
 /*
  * function to load home page on login
@@ -13,11 +10,19 @@ const APIKEY = process.env.API_KEY;
 export const onLoadHome = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const userId: string = req.body._id;
-		const user: User | null = await User.findOne({ userId: userId });
-		// extract their tv shows
-		// send to front end
+		const user: User | null = await User.findOne({ _id: userId });
+		const tvShows: UserTVShow[] = await UserTVShow.find({ userId: userId });
+		let result: User | undefined;
+		if (user) {
+			result = {
+				_id: userId,
+				email: user.email,
+				displayName: user.displayName,
+				userTVInfo: tvShows
+			}
+		}
 		res.status(200);
-		res.send();
+		res.send(result);
 	} catch (e) {
 		console.error(e, 'onLoadHome is failing');
 		res.status(500);

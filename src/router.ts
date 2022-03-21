@@ -4,12 +4,14 @@ import { onLoadShow } from "./controllers/showcontrollers/onloadshow";
 import { onLoadWaybackUrls } from './controllers/showcontrollers/onloadwayback';
 import { addTVShow } from './controllers/Home/addtvshow';
 import { deleteTVShow } from './controllers/Home/deletetvshow';
+import { onLoadHome } from './controllers/Home/onloadhome';
 
 const router = express.Router();
 
 router.post('/register', createUser);
 router.post('/login', login);
 
+router.get('/home', onLoadHome);
 router.post('/home/add/:TMDB_show_Id', addTVShow);
 router.delete('/home/delete/:TMDB_show_Id', deleteTVShow);
 
