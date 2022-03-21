@@ -17,7 +17,8 @@ export const addTVShow = async (req: Request, res: Response): Promise<void> => {
 		const tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: TMDB_show_id });
 		if (tvShow) {
 			res.status(400);
-			res.send('TV show already exists in your TV show list. Please choose a new show instead.')
+			res.send('TV show already exists in your TV show list. Please choose a new show instead.');
+			return;
 		}
     const { data } = await axios.get(
 				`${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
