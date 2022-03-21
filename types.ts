@@ -17,6 +17,7 @@ type User = {
   _id: string;
   email: string;
   displayName: string;
+  avatar: string;
   userTVInfo?: Array<UserTVShow>;
 };
 
