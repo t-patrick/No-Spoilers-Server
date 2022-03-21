@@ -18,7 +18,7 @@ export const loginCheck = async (user: DBUser) => {
     }
   } catch (e) {
     console.error('login credentials not found');
-    return new Error('login credentials not found');
+    return 'login credentials not found';
   }
 };
 
@@ -49,6 +49,6 @@ export const createDBUser = async (user: DBUser): Promise<DBUser | Error> => {
     } else {
       console.error('create new user failing');
     }
-    return new Error('create new use failed');
+    return new Error('create new user failed');
   }
 };
