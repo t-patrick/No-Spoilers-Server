@@ -137,23 +137,25 @@ export const onLoadWaybackUrls = async (req: Request, res: Response): Promise<vo
 		const { data } = await axios.get(
 			`${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
 		);
+		const externalIds: ExternalIds | undefined = await externalIdApiCall(
+			TMDB_show_id
+		);
+		const externalUrls: ExternalIds = externalIdReformat(
+			externalIds,
+			data.name,
+			data.homepage
+		);
 		const nextEpisodeDate: string | undefined = await getNextEpisodeDate(userId, TMDB_show_id);
 		if (nextEpisodeDate) {
-			const externalIds: ExternalIds | undefined = await externalIdApiCall(
-				TMDB_show_id
-			);
-			const externalUrls: ExternalIds = externalIdReformat(
-				externalIds,
-				data.name,
-				data.homepage
-			);
 			const waybackUrls: ExternalIds = externalUrlReformat(externalUrls, nextEpisodeDate);
 			const finalUrls: ExternalIds = await waybackApiCalls(waybackUrls);
 			res.status(200);
 			res.send(finalUrls);
 		}
-
-
+		else {
+			res.status(200);
+			res.send(externalUrls);
+		}
 	} catch (e) {
 		console.error(e, 'onLoadWaybackUrls is failing');
 		res.status(500);
