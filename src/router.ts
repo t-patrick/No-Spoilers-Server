@@ -6,6 +6,7 @@ import { addTVShow } from './controllers/Home/addtvshow';
 import { deleteTVShow } from './controllers/Home/deletetvshow';
 import { searchDebounce } from './controllers/AddShow/searchdebounce';
 import { searchEnter } from './controllers/AddShow/searchenter';
+import { updateEpisodesWatched } from './controllers/showcontrollers/update-episodes-watched';
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.get('/quicksearch', searchDebounce)
 router.get('/search', searchEnter)
 
 router.get('/show/:TMDB_show_Id', onLoadShow);
+router.patch('/show/:TMDB_show_Id', updateEpisodesWatched)
 router.get('/wayback/:TMDB_show_Id', onLoadWaybackUrls);
 
 export default router;

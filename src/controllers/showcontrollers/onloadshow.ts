@@ -7,7 +7,7 @@ const apiUrl = 'https://api.themoviedb.org/3/';
 const APIKEY = process.env.API_KEY;
 
 /*
- * function to reformat episode information from API ro required episode type
+ * function to reformat episode information from API to required episode type
  */
 
 const episodeReformat = (episodes: EpisodefromAPI[]): Episode[] => {

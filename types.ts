@@ -49,6 +49,10 @@ type UserTVShow = {
   episodesWatchedSoFar: number;
 };
 
+interface UserTVShowUpdate extends UserTVShow {
+  percentComplete: number;
+};
+
 /////////////////////// ADD SHOW
 
 type TVShowSnippet = {
