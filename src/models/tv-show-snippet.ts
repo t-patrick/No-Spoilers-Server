@@ -8,7 +8,7 @@ const tvShowSnippetSchema = new mongoose.Schema<TVShowSnippet>({
 });
 
 const TVShowSnippet = mongoose.model<TVShowSnippet>(
-  'UserTVShow',
+  'TVShowSnippet',
   tvShowSnippetSchema
 );
 

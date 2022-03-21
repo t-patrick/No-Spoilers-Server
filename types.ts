@@ -54,8 +54,8 @@ type UserTVShow = {
 type TVShowSnippet = {
   name: string;
   TMDB_show_id: number;
-  poster_path?: string;
-  first_air_date: string;
+  poster_path?: string | null;
+  first_air_date?: string | null;
 };
 
 /**
