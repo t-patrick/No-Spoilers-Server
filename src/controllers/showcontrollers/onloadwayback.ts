@@ -101,22 +101,28 @@ const getNextEpisodeDate = async (	userId: number,	showId: number): Promise<stri
  * function to call wayback API and access final array
  */
 
-const waybackApiCalls = async (	waybackUrls: ExternalIds ): Promise<ExternalIds | undefined> => {
+const waybackApiCalls = async (	waybackUrls: ExternalIds ): Promise<ExternalIds> => {
 	try {
-		const finalUrls: ExternalIds = {};
-		const { data } = await axios.get(
-			`${apiUrl}tv/${showId}/external_ids?api_key=${APIKEY}`
-		);
-		const externalIds: ExternalIds = {
-			imdb_id: data.imdb_id,
-			facebook_id: data.facebook_id,
-			instagram_id: data.instagram_id,
-			twitter_id: data.twitter_id,
-		};
-		return externalIds;
+		for ( let el in waybackUrls ) {
+			if (waybackUrls.hasOwnProperty(el)) {
+				const key = el as keyof ExternalIds;
+				const { data } = await axios.get(waybackUrls[key] || "");
+				const finalSnapshot: string[] = data[data.length - 1];
+				const finalUrl: string = `http://web.archive.org/web/${finalSnapshot[1]}/${finalSnapshot[2]}`
+				waybackUrls[key] = finalUrl
+      }
+    }
+		return waybackUrls;
 	} catch (e) {
 		console.error(e, 'waybackApiCalls is failing');
-		return;
+		return {
+			imdb_id: ``,
+			facebook_id: ``,
+			instagram_id: ``,
+			twitter_id: ``,
+			wikipediaId: ``,
+			homepage: ``
+		};
 	}
 };
 
@@ -142,7 +148,7 @@ export const onLoadWaybackUrls = async (req: Request, res: Response): Promise<vo
 				data.homepage
 			);
 			const waybackUrls: ExternalIds = externalUrlReformat(externalUrls, nextEpisodeDate);
-			const finalUrls: ExternalIds = waybackApiCalls(waybackUrls);
+			const finalUrls: ExternalIds = await waybackApiCalls(waybackUrls);
 			res.status(200);
 			res.send(finalUrls);
 		}
