@@ -17,6 +17,7 @@ const onLoadHome = async (email: string): Promise<User | undefined> => {
         _id: user._id,
         email: user.email,
         displayName: user.displayName,
+        avatar: user.avatar,
         userTVInfo: tvShows
       }
       return result;
