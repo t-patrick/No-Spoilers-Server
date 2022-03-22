@@ -159,6 +159,8 @@ export const updateEpisodesWatched = async (req: Request, res: Response): Promis
 					tvShow.episodeCodeNext = newEpisodeCodeNext;
 				}
 			}
+			await UserTVShow.findOneAndUpdate({ userId: userId, TMDB_show_Id: TMDB_show_Id
+}, tvShow);
 		}
 		res.status(200);
 		res.send(tvShow);
