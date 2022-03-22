@@ -167,7 +167,9 @@ export const updateEpisodesWatched = async (
           episodeNumber
         );
         tvShow.episodesWatchedSoFar = episodesWatchedSoFar;
-        const percentComplete = (episodesWatchedSoFar / numberOfEpisodes) * 100;
+        const percentComplete = Math.floor(
+          (episodesWatchedSoFar / numberOfEpisodes) * 100
+        );
         tvShow.percentComplete = percentComplete;
         if (percentComplete === 100) {
           tvShow.isCompleted = true;

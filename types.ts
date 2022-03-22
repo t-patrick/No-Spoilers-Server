@@ -51,7 +51,7 @@ type UserTVShow = {
 
 interface UserTVShowUpdate extends UserTVShow {
   percentComplete: number;
-};
+}
 
 /////////////////////// ADD SHOW
 

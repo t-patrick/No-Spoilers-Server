@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import { createDBUser, loginCheck } from './db-user-interface';
 import User from '../../models/db-user';
 import UserTVShow from '../../models/user-tv-show';
