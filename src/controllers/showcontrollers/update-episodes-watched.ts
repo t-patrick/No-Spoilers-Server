@@ -142,7 +142,7 @@ export const updateEpisodesWatched = async (req: Request, res: Response): Promis
 			if (seasons) {
 				const episodesWatchedSoFar = getEpisodesWatchedSoFar(seasons, seasonNumber, episodeNumber);
 				tvShow.episodesWatchedSoFar = episodesWatchedSoFar;
-				const percentComplete = (episodesWatchedSoFar / numberOfEpisodes) * 100;
+				const percentComplete = Math.floor((episodesWatchedSoFar / numberOfEpisodes) * 100);
 				tvShow.percentComplete = percentComplete;
 				if (percentComplete === 100) {
 					tvShow.isCompleted = true;
@@ -159,6 +159,8 @@ export const updateEpisodesWatched = async (req: Request, res: Response): Promis
 					tvShow.episodeCodeNext = newEpisodeCodeNext;
 				}
 			}
+			await UserTVShow.findOneAndUpdate({ userId: userId, TMDB_show_Id: TMDB_show_Id
+}, tvShow);
 		}
 		res.status(200);
 		res.send(tvShow);

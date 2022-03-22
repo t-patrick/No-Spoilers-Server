@@ -58,7 +58,7 @@ const calculatePercentComplete = async (
 		let percentComplete: number;
 		const tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: showId });
 		if (tvShow) {
-			percentComplete = (tvShow.episodesWatchedSoFar / number_of_episodes) * 100;
+			percentComplete = Math.floor((tvShow.episodesWatchedSoFar / number_of_episodes) * 100);
 		} else percentComplete = 0;
 		return percentComplete;
 	} catch (e) {
