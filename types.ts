@@ -115,7 +115,12 @@ type ExternalIds = {
 type UserExternalIds = {
   userId: string;
   TMDB_show_id: number;
-  websites?: string[];
+  websites?: Website[];
+};
+
+type Website = {
+  name: string;
+  waybackUrl: string;
 };
 
 /**
@@ -127,8 +132,11 @@ type Topic = {
   TMDB_show_id: number;
   TMDB_episode_id: number;
   authorUserId: number;
+  authorName: string;
+  episodeCode: string;
   title: string;
   body: string;
+  numberOfReplies: number;
   date: Date;
   voteScore: number;
 };
@@ -138,6 +146,7 @@ type Reply = {
   topicId: number;
   authorUserId: number;
   replierEpisodeUpTo: number;
+  authorName: string;
   body: string;
   date: Date;
 };
