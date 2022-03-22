@@ -9,6 +9,7 @@ const topicSchema = new mongoose.Schema<Topic>({
   body: String,
   authorName: String,
   numberOfReplies: Number,
+  avatar: String,
   episodeCode: String,
   date: Date,
   voteScore: Number,
