@@ -38,7 +38,7 @@ type DBUser = {
  */
 
 type UserTVShow = {
-  userId?: string;
+  userId: string;
   TMDB_show_id: number;
   name: string;
   poster_path: string;

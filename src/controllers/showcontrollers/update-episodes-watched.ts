@@ -135,7 +135,7 @@ export const updateEpisodesWatched = async (
       `${apiUrl}tv/${TMDB_show_Id}?api_key=${APIKEY}`
     );
     const numberOfEpisodes: number = data.number_of_episodes;
-    const tvShow: UserTVShowUpdate | null = await UserTVShow.findOne({
+    let tvShow: UserTVShowUpdate | null = await UserTVShow.findOne({
       userId: userId,
       TMDB_show_Id: TMDB_show_Id,
     });
@@ -186,6 +186,10 @@ export const updateEpisodesWatched = async (
           tvShow.episodeCodeNext = newEpisodeCodeNext;
         }
       }
+      await UserTVShow.findOneAndUpdate(
+        { userId: userId, TMDB_show_Id: TMDB_show_Id },
+        tvShow
+      );
     }
     res.status(200);
     res.send(tvShow);
