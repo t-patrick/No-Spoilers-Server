@@ -7,42 +7,6 @@ const apiUrl = 'https://api.themoviedb.org/3/';
 const APIKEY = process.env.API_KEY;
 
 
-const calculatePercentComplete = async (
-	userId: number,
-	showId: number,
-	number_of_episodes: number
-): Promise<number> => {
-	try {
-		let percentComplete: number;
-		const tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: showId });
-		if (tvShow) {
-			percentComplete = (tvShow.episodesWatchedSoFar / number_of_episodes) * 100;
-		} else percentComplete = 0;
-		return percentComplete;
-	} catch (e) {
-		console.error(e, 'calculatePercentComplete is failing');
-		return 0;
-	}
-};
-
-/*
- * function to get the current episode ID
- */
-
-const getNewEpisodeID = async (episodeCode: string, showId: number): Promise<number | undefined> => {
-	try {
-		const episodeCodeArray: string[] = episodeCode.slice(1).split('e');
-		const seasonNumber = Number(episodeCodeArray[0]);
-		const episodeNumber = Number(episodeCodeArray[1]);
-		const { data } = await axios.get(`${apiUrl}tv/${showId}/season/${seasonNumber}/episode/${episodeNumber}?api_key=${APIKEY}`);
-		const episodeId: number = data.id;
-		return episodeId;
-	} catch (e) {
-		console.error(e, 'getNewEpisodeId is failing');
-		return;
-	}
-};
-
 /*
  * function to reformat episode information from API to required episode type
  */
@@ -87,30 +51,60 @@ const seasonApiCall = async (
 };
 
 /*
+ * function to get the full season data for a show
+ */
+
+const getFullSeasonData = async (TMDB_show_id: number): Promise<Season[] | undefined> => {
+	try {
+		const { data } = await axios.get(`${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`);
+		const tvShowSeasons: Season[] = [];
+		for (let i = 0; i < data.seasons.length; i++) {
+			if (data.seasons[i].name !== 'Specials') {
+				const season: Season | undefined = await seasonApiCall(
+					TMDB_show_id,
+					data.seasons[i].season_number
+				);
+				if (season) {
+					tvShowSeasons.push(season);
+				}
+			}
+		}
+		return tvShowSeasons;
+	} catch (e) {
+		console.error(e, 'getFullSeasonData is failing');
+		return;
+	}
+};
+
+/*
+ * function to get an episode ID
+ */
+
+const getNewEpisodeID = async (seasonNumber: number, episodeNumber: number, showId: number): Promise<number | undefined> => {
+	try {
+		const { data } = await axios.get(`${apiUrl}tv/${showId}/season/${seasonNumber}/episode/${episodeNumber}?api_key=${APIKEY}`);
+		return data.id;
+	} catch (e) {
+		console.error(e, 'getNewEpisodeId is failing');
+		return;
+	}
+};
+
+/*
  * function to get new amount of episodes watched
  */
 
-const getEpisodesWatchedSoFar= async (
-	tvShowSeasons: Season[],
-	newEpisodeCode: String,
-): Promise<number | undefined> => {
-	try {
-		const episodeCodeArray: string[] = newEpisodeCode.slice(1).split('e');
-		const seasonNumber = Number(episodeCodeArray[0]);
-		const episodeNumber = Number(episodeCodeArray[1]);
-		let count: number = 0;
-		// for (let i = 1; i<seasonNumber)
-		// const newEpisodeArray: Episode[] = episodeReformat(data.episodes);
-		// const season: Season = {
-		// 	TMDB_season_id: data.id,
-		// 	numberOfEpisodes: data.episodes.length,
-		// 	episodes: newEpisodeArray,
-		// };
-		return 2;
-	} catch (e) {
-		console.error(e, 'seasonApiCall is failing');
-		return;
-	}
+const getEpisodesWatchedSoFar = (
+	seasons: Season[],
+	seasonNumber: number,
+	episodeNumber: number
+): number => {
+	let count: number = 0;
+	for (let i = 0; i < seasonNumber-1; i++) {
+		count = count + seasons[i].numberOfEpisodes;
+		}
+  count = count + episodeNumber
+	return count;
 };
 
 /*
@@ -121,28 +115,50 @@ export const updateEpisodesWatched = async (req: Request, res: Response): Promis
 	try {
 		const userId = req.body._id;
 		const newEpisodeCode = req.body.newEpisodeCode
-		const TMDB_show_id = Number(req.params.TMDB_show_Id);
-		let tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: TMDB_show_id });
+		const TMDB_show_Id = Number(req.params.TMDB_show_Id);
+		const episodeCodeArray: string[] = newEpisodeCode.slice(1).split('e');
+		let seasonNumber = Number(episodeCodeArray[0]);
+		let episodeNumber = Number(episodeCodeArray[1]);
+		const {data} = await axios.get(`${apiUrl}tv/${TMDB_show_Id}?api_key=${APIKEY}`)
+		const numberOfEpisodes: number = data.number_of_episodes;
+		let tvShow: UserTVShowUpdate | null = await UserTVShow.findOne({ userId: userId, TMDB_show_Id: TMDB_show_Id });
+		if (!tvShow) {
+			res.status(500);
+			res.send('Failed to find TV show');
+		}
 		if (tvShow) {
 			tvShow.episodeCodeUpTo = newEpisodeCode;
-			const newEpisodeId: number | undefined = await getNewEpisodeID(newEpisodeCode, TMDB_show_id);
+			const newEpisodeId: number | undefined = await getNewEpisodeID(seasonNumber, episodeNumber, TMDB_show_Id);
+			if (!newEpisodeId) {
+				res.status(500);
+				res.send('Failed to find new episode ID');
+			}
 			if (newEpisodeId) tvShow.episodeIdUpTo = newEpisodeId;
-		  const { data } = await axios.get(`${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`);
-			const tvShowSeasons: Season[] = [];
-			for (let i = 0; i < data.seasons.length; i++) {
-				if (data.seasons[i].name !== 'Specials') {
-					const season: Season | undefined = await seasonApiCall(
-						TMDB_show_id,
-						data.seasons[i].season_number
-					);
-					if (season) {
-						tvShowSeasons.push(season);
+			const seasons = await getFullSeasonData(TMDB_show_Id);
+			if (!seasons) {
+				res.status(500);
+				res.send('Failed to get full season data');
+			}
+			if (seasons) {
+				const episodesWatchedSoFar = getEpisodesWatchedSoFar(seasons, seasonNumber, episodeNumber);
+				tvShow.episodesWatchedSoFar = episodesWatchedSoFar;
+				const percentComplete = (episodesWatchedSoFar / numberOfEpisodes) * 100;
+				tvShow.percentComplete = percentComplete;
+				if (percentComplete === 100) {
+					tvShow.isCompleted = true;
+					tvShow.episodeCodeNext = '';
+				} else {
+					tvShow.isCompleted = false;
+					if (seasons[seasonNumber - 1].numberOfEpisodes === episodeNumber) {
+						seasonNumber++;
+						episodeNumber = 1;
+					} else {
+						episodeNumber++;
 					}
+					const newEpisodeCodeNext = `s${seasonNumber}e${episodeNumber}`;
+					tvShow.episodeCodeNext = newEpisodeCodeNext;
 				}
 			}
-			const episodesWatchedSoFar = await getEpisodesWatchedSoFar(tvShowSeasons, newEpisodeCode);
-
-			const percentComplete: number = await calculatePercentComplete(userId, TMDB_show_id, data.number_of_episodes);
 		}
 		res.status(200);
 		res.send(tvShow);
@@ -151,8 +167,3 @@ export const updateEpisodesWatched = async (req: Request, res: Response): Promis
 		res.status(500);
 	}
 };
-
-// isCompleted: boolean; if next episode is null then this is true, else false
-// episodeCodeNext: string; find next episode code
-// episodesWatchedSoFar: number;
-// percentComplete: number
