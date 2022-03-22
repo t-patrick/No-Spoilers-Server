@@ -112,6 +112,12 @@ type ExternalIds = {
   homepage?: string;
 };
 
+type UserExternalIds = {
+  userId: string;
+  TMDB_show_id: number;
+  websites?: string[];
+};
+
 /**
  * Forum Stuff
  */

@@ -121,7 +121,7 @@ export const updateEpisodesWatched = async (req: Request, res: Response): Promis
 		let episodeNumber = Number(episodeCodeArray[1]);
 		const {data} = await axios.get(`${apiUrl}tv/${TMDB_show_Id}?api_key=${APIKEY}`)
 		const numberOfEpisodes: number = data.number_of_episodes;
-		let tvShow: UserTVShowUpdate | null = await UserTVShow.findOne({ userId: userId, TMDB_show_Id: TMDB_show_Id });
+		let tvShow: UserTVShowUpdate | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: TMDB_show_Id });
 		if (!tvShow) {
 			res.status(500);
 			res.send('Failed to find TV show');
@@ -159,7 +159,7 @@ export const updateEpisodesWatched = async (req: Request, res: Response): Promis
 					tvShow.episodeCodeNext = newEpisodeCodeNext;
 				}
 			}
-			await UserTVShow.findOneAndUpdate({ userId: userId, TMDB_show_Id: TMDB_show_Id
+			await UserTVShow.findOneAndUpdate({ userId: userId, TMDB_show_id: TMDB_show_Id
 }, tvShow);
 		}
 		res.status(200);
