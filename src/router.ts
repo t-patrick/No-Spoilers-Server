@@ -8,6 +8,7 @@ import { searchDebounce } from './controllers/AddShow/search-debounce';
 import { searchEnter } from './controllers/AddShow/search-enter';
 import { updateEpisodesWatched } from './controllers/showcontrollers/update-episodes-watched';
 import { addUserWayback } from './controllers/UserWayback/add-user-wayback';
+import { deleteUserWayback } from './controllers/UserWayback/delete-user-wayback';
 
 const router = express.Router();
 
@@ -27,5 +28,6 @@ router.get('/wayback/:TMDB_show_Id', onLoadWaybackUrls);
 router.get('/wayback/update/:TMDB_show_Id', onLoadWaybackUrls);
 
 router.post('/userwayback/add/:TMDB_show_Id', addUserWayback);
+router.delete('/userwayback/delete/:TMDB_show_Id', deleteUserWayback);
 
 export default router;
