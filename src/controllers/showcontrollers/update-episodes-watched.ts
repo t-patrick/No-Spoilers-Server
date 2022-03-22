@@ -99,14 +99,14 @@ const getEpisodesWatchedSoFar= async (
 		const seasonNumber = Number(episodeCodeArray[0]);
 		const episodeNumber = Number(episodeCodeArray[1]);
 		let count: number = 0;
-		for (let i = 1; i<seasonNumber)
-		const newEpisodeArray: Episode[] = episodeReformat(data.episodes);
-		const season: Season = {
-			TMDB_season_id: data.id,
-			numberOfEpisodes: data.episodes.length,
-			episodes: newEpisodeArray,
-		};
-		return season;
+		// for (let i = 1; i<seasonNumber)
+		// const newEpisodeArray: Episode[] = episodeReformat(data.episodes);
+		// const season: Season = {
+		// 	TMDB_season_id: data.id,
+		// 	numberOfEpisodes: data.episodes.length,
+		// 	episodes: newEpisodeArray,
+		// };
+		return 2;
 	} catch (e) {
 		console.error(e, 'seasonApiCall is failing');
 		return;

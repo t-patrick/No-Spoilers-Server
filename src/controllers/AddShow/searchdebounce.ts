@@ -9,8 +9,10 @@ import TVShowSnippet from '../../models/tv-show-snippet';
 export const searchDebounce = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const search: string = req.body.search;
-		const regex = new RegExp(search, 'i');
-		const tvShows: TVShowSnippet[] | null = await TVShowSnippet.find({ name: { $regex: regex } });
+		const normalized = search.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+		const punctuationless = normalized.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+		const regex = new RegExp(punctuationless, 'i');
+		const tvShows: TVShowSnippet[] | null = await TVShowSnippet.find({ searchable: { $regex: regex } });
 		const result = tvShows.slice(0, 5);
 		res.status(200);
 		res.send(result);

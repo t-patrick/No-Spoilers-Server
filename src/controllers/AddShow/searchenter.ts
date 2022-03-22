@@ -21,7 +21,8 @@ export const searchEnter = async (req: Request, res: Response): Promise<void> =>
 			  name: data.results[i].name,
 				TMDB_show_id: data.results[i].id,
 				poster_path: data.results[i].poster_path,
-				first_air_date: data.results[i].first_air_date
+				first_air_date: data.results[i].first_air_date,
+				searchable: data.results[i].searchable,
       })
 		};
 		res.status(200);

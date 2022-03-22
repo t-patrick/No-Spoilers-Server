@@ -60,6 +60,7 @@ type TVShowSnippet = {
   TMDB_show_id: number;
   poster_path?: string | null;
   first_air_date?: string | null;
+  searchable: string;
 };
 
 /**
