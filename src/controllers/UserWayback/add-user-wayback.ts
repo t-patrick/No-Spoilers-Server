@@ -90,15 +90,18 @@ export const addUserWayback = async (req: Request, res: Response): Promise<void>
 			if (data.length) {
 				const finalSnapshot: string[] = data[data.length - 1];
 				finalUrl = `http://web.archive.org/web/${finalSnapshot[1]}/${finalSnapshot[2]}`;
-			} else finalUrl = '';
-			const existingUser = await UserExternalId.findOne({
-				userId: userId, TMDB_show_id: TMDB_show_id
-			});
-			updateDatabaseWithUrl(userId, TMDB_show_id, website, finalUrl);
-			res.status(200);
-			res.send({ name: website, waybackUrl: finalUrl });
+				updateDatabaseWithUrl(userId, TMDB_show_id, website, finalUrl);
+				res.status(200);
+				res.send({ name: website, waybackUrl: finalUrl });
+				return;
+			} else {
+				finalUrl = '';
+				updateDatabaseWithUrl(userId, TMDB_show_id, website, finalUrl);
+				res.status(200);
+				res.send({ name: website, waybackUrl: finalUrl });
+			}
 		} else {
-			updateDatabaseWithUrl(userId, TMDB_show_id, website, '');
+			updateDatabaseWithUrl(userId, TMDB_show_id, website, website);
 			res.status(200);
 			res.send({ name: website, waybackUrl: website });
 		}
