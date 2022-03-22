@@ -135,7 +135,6 @@ type Topic = {
   authorName: string;
   episodeCode: string;
   title: string;
-  avatar: string;
   body: string;
   numberOfReplies: number;
   avatar: string,
@@ -149,7 +148,6 @@ type Reply = {
   authorUserId: number;
   avatar: string,
   replierEpisodeUpTo: number;
-  avatar: string;
   authorName: string;
   body: string;
   date: Date;
