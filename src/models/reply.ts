@@ -6,6 +6,8 @@ const replySchema = new mongoose.Schema<Reply>({
   replierEpisodeUpTo: Number,
   body: String,
   date: Date,
+  avatar: String,
+  authorName: String,
 });
 
 const Reply = mongoose.model<Reply>('Reply', replySchema);

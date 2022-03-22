@@ -7,6 +7,10 @@ const topicSchema = new mongoose.Schema<Topic>({
   authorUserId: mongoose.SchemaTypes.ObjectId,
   title: String,
   body: String,
+  authorName: String,
+  numberOfReplies: Number,
+  avatar: String,
+  episodeCode: String,
   date: Date,
   voteScore: Number,
 });

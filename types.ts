@@ -112,6 +112,17 @@ type ExternalIds = {
   homepage?: string;
 };
 
+type UserExternalIds = {
+  userId: string;
+  TMDB_show_id: number;
+  websites?: Website[];
+};
+
+type Website = {
+  name: string;
+  waybackUrl: string;
+};
+
 /**
  * Forum Stuff
  */
@@ -121,8 +132,12 @@ type Topic = {
   TMDB_show_id: number;
   TMDB_episode_id: number;
   authorUserId: number;
+  authorName: string;
+  episodeCode: string;
   title: string;
   body: string;
+  numberOfReplies: number;
+  avatar: string,
   date: Date;
   voteScore: number;
 };
@@ -131,7 +146,9 @@ type Reply = {
   _id: number;
   topicId: number;
   authorUserId: number;
+  avatar: string,
   replierEpisodeUpTo: number;
+  authorName: string;
   body: string;
   date: Date;
 };

@@ -137,7 +137,7 @@ export const updateEpisodesWatched = async (
     const numberOfEpisodes: number = data.number_of_episodes;
     let tvShow: UserTVShowUpdate | null = await UserTVShow.findOne({
       userId: userId,
-      TMDB_show_Id: TMDB_show_Id,
+      TMDB_show_id: TMDB_show_Id,
     });
     if (!tvShow) {
       res.status(500);
@@ -187,7 +187,7 @@ export const updateEpisodesWatched = async (
         }
       }
       await UserTVShow.findOneAndUpdate(
-        { userId: userId, TMDB_show_Id: TMDB_show_Id },
+        { userId: userId, TMDB_show_id: TMDB_show_Id },
         tvShow
       );
     }
