@@ -60,7 +60,7 @@ type TVShowSnippet = {
   TMDB_show_id: number;
   poster_path?: string | null;
   first_air_date?: string | null;
-  searchable: string;
+  searchable?: string;
 };
 
 /**
@@ -160,4 +160,45 @@ type Report = {
   topicOrReply: 'Topic' | 'Reply';
   itemId: number;
   date: Date;
+};
+
+/**
+ * Mongoose response types
+ */
+
+type ModificationResponse = {
+  acknowledged: boolean;
+  modifiedCount: number;
+  upsertedId: Object | null;
+  upsertedCount: number;
+  matchedCount: number;
+};
+
+/**
+ * Axios types
+ */
+
+type ShowTextSearch = {
+  data: {
+    page: number;
+    results: ShowTextSearchResults[];
+    total_pages: number;
+    total_results: number;
+  }
+};
+
+type ShowTextSearchResults = {
+  poster_path: string | null;
+  popularity: number;
+  id: number;
+  backdrop_path: string | null;
+  vote_average: number;
+  overview: string;
+  first_air_date: string;
+  origin_country: string[];
+  genre_ids: number[];
+  original_language: string;
+  vote_count: number;
+  name: string;
+  original_name: string;
 };
