@@ -38,6 +38,6 @@ router.patch('/userwayback/update/:TMDB_show_Id', updateUserWayback);
 
 router.post('/forum/topic/add/:TMDB_show_Id', addTopic);
 router.delete('/forum/topic/delete', deleteTopic);
-router.post('/forum/reply/add', addReply);
+router.post('/forum/reply/add/:TMDB_show_Id', addReply);
 
 export default router;

@@ -149,8 +149,7 @@ interface UserTopic extends Topic {
 }
 
 type Reply = {
-  _id?: string;
-  topicId: number;
+  topicId: string;
   authorUserId: string;
   avatar: string;
   replierEpisodeUpTo: number;
