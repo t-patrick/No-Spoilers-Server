@@ -25,10 +25,10 @@ router.post('/search', searchEnter);
 
 router.get('/show/:TMDB_show_Id', onLoadShow);
 router.patch('/show/:TMDB_show_Id', updateEpisodesWatched);
-router.get('/wayback/:TMDB_show_Id', onLoadWaybackUrls);
-router.get('/wayback/update/:TMDB_show_Id', onLoadWaybackUrls);
+router.post('/wayback/:TMDB_show_Id', onLoadWaybackUrls);
+// router.get('/wayback/update/:TMDB_show_Id', onLoadWaybackUrls);
 
-router.get('/userwayback/:TMDB_show_Id', onLoadUserWayback);
+router.post('/userwayback/:TMDB_show_Id', onLoadUserWayback);
 router.post('/userwayback/add/:TMDB_show_Id', addUserWayback);
 router.delete('/userwayback/delete/:TMDB_show_Id', deleteUserWayback);
 router.patch('/userwayback/update/:TMDB_show_Id', updateUserWayback);

@@ -202,3 +202,8 @@ type ShowTextSearchResults = {
   name: string;
   original_name: string;
 };
+
+type UserWayback = {
+  name: string;
+  url: string;
+};
