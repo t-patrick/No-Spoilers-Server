@@ -12,6 +12,8 @@ const topicSchema = new mongoose.Schema<Topic>({
   episodeCode: String,
   date: Date,
   voteScore: Number,
+  upVoteIds: [String],
+  downVoteIds: [String],
   replies: [
     {
       topicId: mongoose.SchemaTypes.ObjectId,
