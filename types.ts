@@ -128,10 +128,10 @@ type Website = {
  */
 
 type Topic = {
-  _id: number;
+  _id?: string;
   TMDB_show_id: number;
   TMDB_episode_id: number;
-  authorUserId: number;
+  authorUserId: string;
   authorName: string;
   episodeCode: string;
   title: string;
@@ -140,12 +140,13 @@ type Topic = {
   avatar: string;
   date: Date;
   voteScore: number;
+  replies: Reply[];
 };
 
 type Reply = {
-  _id: number;
+  _id: string;
   topicId: number;
-  authorUserId: number;
+  authorUserId: string;
   avatar: string;
   replierEpisodeUpTo: number;
   authorName: string;
@@ -173,6 +174,11 @@ type ModificationResponse = {
   upsertedCount: number;
   matchedCount: number;
 };
+
+type DeleteResponse = {
+  acknowledged: boolean;
+  deletedCount: number;
+}
 
 /**
  * Axios types

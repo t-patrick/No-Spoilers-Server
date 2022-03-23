@@ -34,7 +34,7 @@ export const createUser = async (req: Request, res: Response) => {
     const user = await createDBUser(req.body);
     const result = await onLoadHome(req.body.email);
     if (!result) {
-      res.status(401).send('user or password is missing');
+      res.status(401).send('user or password is missing, or display name already exists');
     }
     res.status(201).send(result);
   } catch (e: any) {
