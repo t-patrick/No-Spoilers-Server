@@ -12,6 +12,17 @@ const topicSchema = new mongoose.Schema<Topic>({
   episodeCode: String,
   date: Date,
   voteScore: Number,
+  replies: [
+    {
+      topicId: mongoose.SchemaTypes.ObjectId,
+      authorUserId: mongoose.SchemaTypes.ObjectId,
+      replierEpisodeUpTo: Number,
+      body: String,
+      date: Date,
+      avatar: String,
+      authorName: String,
+    }
+  ],
 });
 
 const Topic = mongoose.model<Topic>('Topic', topicSchema);

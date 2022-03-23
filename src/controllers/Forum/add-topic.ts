@@ -10,12 +10,10 @@ import Topic from '../../models/topic';
 export const addTopic = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const userId: string = req.body._id;
-		console.log(userId, 'id')
 		const title = req.body.title;
 		const body = req.body.body;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);
 		const tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: TMDB_show_id });
-		console.log(tvShow, 'show');
 		if (!tvShow) {
 			res.status(400);
 			res.send('TV show does not exist in user TV show database.');
@@ -43,7 +41,8 @@ export const addTopic = async (req: Request, res: Response): Promise<void> => {
 			numberOfReplies: 0,
 			avatar: avatar,
 			date: date,
-			voteScore: 0
+			voteScore: 0,
+			replies: []
 		};
 		const dbTopic = await Topic.create(topic);
 		res.status(200);

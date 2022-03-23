@@ -140,6 +140,7 @@ type Topic = {
   avatar: string;
   date: Date;
   voteScore: number;
+  replies: Reply[];
 };
 
 type Reply = {
