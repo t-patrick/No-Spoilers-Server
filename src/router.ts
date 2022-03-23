@@ -11,6 +11,7 @@ import { addUserWayback } from './controllers/UserWayback/add-user-wayback';
 import { deleteUserWayback } from './controllers/UserWayback/delete-user-wayback';
 import { onLoadUserWayback } from './controllers/UserWayback/on-load-user-wayback';
 import { updateUserWayback } from './controllers/UserWayback/update-user-wayback';
+import { addTopic } from './controllers/Forum/add-topic';
 
 const router = express.Router();
 
@@ -33,5 +34,7 @@ router.get('/userwayback/:TMDB_show_Id', onLoadUserWayback);
 router.post('/userwayback/add/:TMDB_show_Id', addUserWayback);
 router.delete('/userwayback/delete/:TMDB_show_Id', deleteUserWayback);
 router.patch('/userwayback/update/:TMDB_show_Id', updateUserWayback);
+
+router.post('/forum/topic/add/:TMDB_show_Id', addTopic);
 
 export default router;
