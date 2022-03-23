@@ -30,15 +30,6 @@ export const addReply = async (req: Request, res: Response): Promise<void> => {
 		const authorName: string = user.displayName;
 		const avatar: string = user.avatar;
 		const date = new Date();
-		const reply: Reply = {
-			topicId: topicId,
-			authorUserId: userId,
-			avatar: avatar,
-			replierEpisodeUpTo: episodesWatchedSoFar,
-			authorName: authorName,
-			body: body,
-			date: date,
-		}
 		await Topic.findOneAndUpdate(
 			{
 				_id: topicId
