@@ -161,3 +161,15 @@ type Report = {
   itemId: number;
   date: Date;
 };
+
+/**
+ * Mongoose response types
+ */
+
+type ModificationResponse = {
+  acknowledged: boolean;
+  modifiedCount: number;
+  upsertedId: number | null;
+  upsertedCount: number;
+  matchedCount: number;
+};

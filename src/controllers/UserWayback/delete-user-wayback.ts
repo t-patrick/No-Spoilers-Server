@@ -1,12 +1,5 @@
-import axios from 'axios';
-import * as dotenv from 'dotenv';
 import { Request, Response } from 'express';
-dotenv.config();
 import UserExternalId from '../../models/user-external-id';
-import UserTVShow from '../../models/user-tv-show';
-const apiUrl = 'https://api.themoviedb.org/3/';
-const APIKEY = process.env.API_KEY;
-
 
 /*
  * function to delete a user input url from the user wayback database
