@@ -14,7 +14,7 @@ export const searchEnter = async (req: Request, res: Response): Promise<void> =>
 	try {
 		const search: string = req.body.search;
 		const page: number = req.body.page;
-		const { data } = await axios.get(`${apiUrl}search/tv?api_key=${APIKEY}&page=${page}&query=${search}&include_adult=false`);
+		const { data }: ShowTextSearch = await axios.get(`${apiUrl}search/tv?api_key=${APIKEY}&page=${page}&query=${search}&include_adult=false`);
 		let tvShows: TVShowSnippet[] = [];
 		for (let i = 0; i < data.results.length; i++) {
 			tvShows.push({
@@ -22,7 +22,6 @@ export const searchEnter = async (req: Request, res: Response): Promise<void> =>
 				TMDB_show_id: data.results[i].id,
 				poster_path: data.results[i].poster_path,
 				first_air_date: data.results[i].first_air_date,
-				searchable: data.results[i].searchable,
       })
 		};
 		res.status(200);
