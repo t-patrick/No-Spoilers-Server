@@ -175,6 +175,11 @@ type ModificationResponse = {
   matchedCount: number;
 };
 
+type DeleteResponse = {
+  acknowledged: boolean;
+  deletedCount: number;
+}
+
 /**
  * Axios types
  */
