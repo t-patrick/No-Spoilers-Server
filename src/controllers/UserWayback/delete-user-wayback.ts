@@ -10,7 +10,7 @@ export const deleteUserWayback = async (req: Request, res: Response): Promise<vo
 		const userId: string = req.body._id;
 		const website: string = req.body.website;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);
-		const deleted = await UserExternalId.updateOne({
+		const deleted: ModificationResponse  = await UserExternalId.updateOne({
 			userId: userId, TMDB_show_id: TMDB_show_id
 		}, { $pull: { websites: { name: website } } }, { safe: true, multi: true });
 		res.status(200);
