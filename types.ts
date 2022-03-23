@@ -169,7 +169,7 @@ type Report = {
 type ModificationResponse = {
   acknowledged: boolean;
   modifiedCount: number;
-  upsertedId: number | null;
+  upsertedId: Object | null;
   upsertedCount: number;
   matchedCount: number;
 };
