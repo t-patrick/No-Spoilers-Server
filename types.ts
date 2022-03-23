@@ -126,7 +126,6 @@ type Website = {
 /**
  * Forum Stuff
  */
-
 type Topic = {
   _id?: string;
   TMDB_show_id: number;
@@ -140,11 +139,17 @@ type Topic = {
   avatar: string;
   date: Date;
   voteScore: number;
+  upVoteIds: string[];
+  downVoteIds: string[];
   replies: Reply[];
 };
 
+interface UserTopic extends Topic {
+  userVote: number;
+}
+
 type Reply = {
-  _id: string;
+  _id?: string;
   topicId: number;
   authorUserId: string;
   avatar: string;

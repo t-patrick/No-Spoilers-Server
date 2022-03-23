@@ -10,8 +10,8 @@ import Topic from '../../models/topic';
 export const addTopic = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const userId: string = req.body._id;
-		const title = req.body.title;
-		const body = req.body.body;
+		const title: string = req.body.title;
+		const body: string = req.body.body;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);
 		const tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: TMDB_show_id });
 		if (!tvShow) {
@@ -42,11 +42,14 @@ export const addTopic = async (req: Request, res: Response): Promise<void> => {
 			avatar: avatar,
 			date: date,
 			voteScore: 0,
+			upVoteIds: [],
+			downVoteIds: [],
 			replies: []
 		};
-		const dbTopic = await Topic.create(topic);
+	  await Topic.create(topic);
+		const userTopic: UserTopic = { ...topic, userVote: 0 };
 		res.status(200);
-		res.send(dbTopic);
+		res.send(userTopic);
 	} catch (e) {
 		console.error(e, 'addTopic is failing');
 		res.status(500);
