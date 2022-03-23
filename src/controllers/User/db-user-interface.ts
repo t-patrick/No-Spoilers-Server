@@ -8,7 +8,6 @@ export const loginCheck = async (user: DBUser) => {
     const userFromDB: DBUser = (await User.findOne({
       email: user.email,
     })) as DBUser;
-
     const match = await bcrypt.compare(user.password, userFromDB.password);
 
     if (match) {
@@ -26,7 +25,6 @@ export const loginCheck = async (user: DBUser) => {
 
 export const createDBUser = async (user: DBUser): Promise<DBUser | Error> => {
   const resp = await User.exists({ email: user.email });
-  console.log(resp);
   if (resp) throw new Error('email already exists');
 
   try {

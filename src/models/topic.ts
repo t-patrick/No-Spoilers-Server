@@ -1,7 +1,6 @@
 import mongoose from '.';
 
 const topicSchema = new mongoose.Schema<Topic>({
-  _id: Number,
   TMDB_show_id: Number,
   TMDB_episode_id: Number,
   authorUserId: mongoose.SchemaTypes.ObjectId,
