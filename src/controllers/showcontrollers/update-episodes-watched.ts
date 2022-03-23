@@ -108,7 +108,7 @@ const getEpisodesWatchedSoFar = (
   seasonNumber: number,
   episodeNumber: number
 ): number => {
-  let count: number = 0;
+  let count = 0;
   for (let i = 0; i < seasonNumber - 1; i++) {
     count = count + seasons[i].numberOfEpisodes;
   }
@@ -135,7 +135,7 @@ export const updateEpisodesWatched = async (
       `${apiUrl}tv/${TMDB_show_Id}?api_key=${APIKEY}`
     );
     const numberOfEpisodes: number = data.number_of_episodes;
-    let tvShow: UserTVShowUpdate | null = await UserTVShow.findOne({
+    const tvShow: UserTVShowUpdate | null = await UserTVShow.findOne({
       userId: userId,
       TMDB_show_id: TMDB_show_Id,
     });

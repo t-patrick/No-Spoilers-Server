@@ -137,7 +137,7 @@ type Topic = {
   title: string;
   body: string;
   numberOfReplies: number;
-  avatar: string,
+  avatar: string;
   date: Date;
   voteScore: number;
 };
@@ -146,7 +146,7 @@ type Reply = {
   _id: number;
   topicId: number;
   authorUserId: number;
-  avatar: string,
+  avatar: string;
   replierEpisodeUpTo: number;
   authorName: string;
   body: string;
@@ -184,7 +184,7 @@ type ShowTextSearch = {
     results: ShowTextSearchResults[];
     total_pages: number;
     total_results: number;
-  }
+  };
 };
 
 type ShowTextSearchResults = {
