@@ -19,21 +19,9 @@ export const addReply = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const userId: string = req.body._id;
 		const body: string = req.body.body;
-		const TMDB_show_id = Number(req.params.TMDB_show_Id);
-		const tvShow: UserTVShow | null = await UserTVShow.findOne({ userId: userId, TMDB_show_id: TMDB_show_id });
-		if (!tvShow) {
-			res.status(400);
-			res.send('TV show does not exist in user TV show database.');
-			return;
-		}
-		const TMDB_episode_id: number = tvShow.episodeIdUpTo;
-		const episodeCode: string = tvShow.episodeCodeUpTo;
-		const user: User | null = await User.findOne({ _id: userId });
-		if (!user) {
-			res.status(400);
-			res.send('User does not exist in user database.');
-			return;
-		}
+		const topicId: string = req.body.string;
+
+	
 		// const authorName: string = user.displayName;
 		// const avatar: string = user.avatar;
 		// const date = new Date();
