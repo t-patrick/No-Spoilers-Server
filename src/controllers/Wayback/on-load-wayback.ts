@@ -67,9 +67,9 @@ const externalUrlReformat = (
   externalUrls: ExternalIds,
   nextEpisodeDate: string
 ): ExternalIds => {
-  let year: number = Number(nextEpisodeDate.slice(0, 4));
+  let year = Number(nextEpisodeDate.slice(0, 4));
   year--;
-  const fromDate: string = `${year}0101`;
+  const fromDate = `${year}0101`;
   const waybackUrls: ExternalIds = {
     imdb_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.imdb_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`,
     facebook_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.facebook_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`,
@@ -123,8 +123,8 @@ const waybackApiCalls = async (
   waybackUrls: ExternalIds
 ): Promise<ExternalIds> => {
   try {
-    for (let el in waybackUrls) {
-      if (waybackUrls.hasOwnProperty(el)) {
+    for (const el in waybackUrls) {
+      if (Object.prototype.hasOwnProperty.call(waybackUrls, el)) {
         const key = el as keyof ExternalIds;
         const { data } = await axios.get(waybackUrls[key] || '');
         if (data.length) {
