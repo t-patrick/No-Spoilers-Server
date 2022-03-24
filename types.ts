@@ -56,8 +56,8 @@ interface UserTVShowUpdate extends UserTVShow {
 /////////////////////// ADD SHOW
 
 type TVShowSnippet = {
-  name: string;
-  TMDB_show_id: number;
+  name?: string;
+  TMDB_show_id?: number;
   poster_path?: string | null;
   first_air_date?: string | null;
   searchable?: string;
@@ -68,39 +68,40 @@ type TVShowSnippet = {
  */
 
 type Season = {
-  TMDB_season_id: number;
-  numberOfEpisodes: number;
+  TMDB_season_id?: number;
+  numberOfEpisodes?: number;
+  poster_path?: string | null;
   episodes: Episode[];
 };
 
 type Episode = {
   name: string;
-  TMDB_episode_id: number;
+  TMDB_episode_id?: number;
   season_number: number;
   episode_number: number;
 };
 
 interface EpisodefromAPI extends Episode {
-  id: number;
+  id?: number;
   air_date?: string;
 }
 
 type TVShow = {
-  TMDB_show_id: number;
-  name: string;
-  first_air_date: string;
-  last_air_date: string;
-  homepage: string;
-  tagline: string;
-  backdrop_path: string;
-  poster_path: string;
-  created_by: string;
-  next_episode_to_air: string;
-  number_of_episodes: number;
-  number_of_seasons: number;
+  TMDB_show_id?: number;
+  name?: string;
+  first_air_date?: string;
+  last_air_date?: string;
+  homepage?: string;
+  tagline?: string;
+  backdrop_path?: string | null;
+  poster_path?: string | null;
+  created_by?: CreatedBy[];
+  next_episode_to_air?: AxiosEpisode | null;
+  number_of_episodes?: number;
+  number_of_seasons?: number;
   percentComplete: number;
   seasons: Array<Season>;
-  overview: string;
+  overview?: string;
 };
 
 type ExternalIds = {
@@ -194,25 +195,83 @@ type DeleteResponse = {
 
 type ShowTextSearch = {
   data: {
-    page: number;
-    results: ShowTextSearchResults[];
-    total_pages: number;
-    total_results: number;
+    page?: number;
+    results?: ShowTextSearchResults[];
+    total_pages?: number;
+    total_results?: number;
   };
 };
 
 type ShowTextSearchResults = {
-  poster_path: string | null;
-  popularity: number;
-  id: number;
-  backdrop_path: string | null;
-  vote_average: number;
-  overview: string;
-  first_air_date: string;
-  origin_country: string[];
-  genre_ids: number[];
-  original_language: string;
-  vote_count: number;
-  name: string;
-  original_name: string;
+  poster_path?: string | null;
+  popularity?: number;
+  id?: number;
+  backdrop_path?: string | null;
+  vote_average?: number;
+  overview?: string;
+  first_air_date?: string;
+  origin_country?: string[];
+  genre_ids?: number[];
+  original_language?: string;
+  vote_count?: number;
+  name?: string;
+  original_name?: string;
+};
+
+type AxiosTVShow = {
+  data: {
+    name?: string;
+    number_of_episodes?: number;
+    id?: number;
+    seasons?: AxiosSeason[];
+    first_air_date?: string;
+    homepage?: string;
+    last_air_date?: string;
+    tagline?: string;
+    backdrop_path?: string | null;
+    poster_path?: string | null;
+    created_by?: CreatedBy[];
+    next_episode_to_air?: AxiosEpisode | null;
+    number_of_seasons?: number;
+    overview?: string;
+  };
+};
+
+type CreatedBy = {
+  id?: number;
+  credit_id?: string;
+  name?: string;
+  gender?: number;
+  profile_path?: string | null;
+};
+
+type AxiosEpisode = {
+  air_date?: string;
+  episode_number?: number;
+  id?: number;
+  name?: string;
+  overview?: string;
+  production_code?: string;
+  season_number?: number;
+  still_path?: string | null;
+  vote_average?: number;
+  vote_count?: number;
+};
+
+type AxiosSeason = {
+  air_date?: string;
+  episode_count?: number;
+  id?: number;
+  name?: string;
+  overview?: string;
+  poster_path?: string;
+  season_number?: number;
+};
+
+type AxiosAPICallSeason = {
+  data: {
+    id?: number;
+    episodes?: EpisodefromAPI[];
+    poster_path?: string | null
+  };
 };

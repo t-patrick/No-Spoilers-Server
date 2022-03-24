@@ -30,19 +30,23 @@ const episodeReformat = (episodes: EpisodefromAPI[]): Episode[] => {
 
 const seasonApiCall = async (
   showId: number,
-  seasonNumber: number
+  seasonNumber: number | undefined
 ): Promise<Season | undefined> => {
   try {
-    const { data } = await axios.get(
+    const axiosAPISeason: AxiosAPICallSeason = await axios.get(
       `${apiUrl}tv/${showId}/season/${seasonNumber}?api_key=${APIKEY}`
     );
-    const newEpisodeArray: Episode[] = episodeReformat(data.episodes);
-    const season: Season = {
-      TMDB_season_id: data.id,
-      numberOfEpisodes: data.episodes.length,
-      episodes: newEpisodeArray,
-    };
-    return season;
+    const data = axiosAPISeason.data;
+    if (data.episodes) {
+      const newEpisodeArray: Episode[] = episodeReformat(data.episodes);
+      const season: Season = {
+        TMDB_season_id: data.id,
+        poster_path: data.poster_path,
+        numberOfEpisodes: data.episodes.length,
+        episodes: newEpisodeArray,
+      };
+      return season;
+    }
   } catch (e) {
     console.error(e, 'seasonApiCall is failing');
     return;
@@ -83,23 +87,29 @@ export const onLoadShow = async (
   try {
     const userId = req.body._id;
     const TMDB_show_id = Number(req.params.TMDB_show_Id);
-    const { data } = await axios.get(
+    const axiosTVShow: AxiosTVShow  = await axios.get(
       `${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
     );
-    const percentComplete: number = await calculatePercentComplete(
-      userId,
-      TMDB_show_id,
-      data.number_of_episodes
-    );
+    const data = axiosTVShow.data;
+    let percentComplete: number = 0;
+    if (data.number_of_episodes) {
+      percentComplete = await calculatePercentComplete(
+        userId,
+        TMDB_show_id,
+        data.number_of_episodes
+      );
+    }
     const tvShowSeasons: Season[] = [];
-    for (let i = 0; i < data.seasons.length; i++) {
-      if (data.seasons[i].name !== 'Specials') {
-        const season: Season | undefined = await seasonApiCall(
-          TMDB_show_id,
-          data.seasons[i].season_number
-        );
-        if (season) {
-          tvShowSeasons.push(season);
+    if (data.seasons) {
+      for (let i = 0; i < data.seasons.length; i++) {
+        if (data.seasons[i].name !== 'Specials') {
+            const season: Season | undefined = await seasonApiCall(
+              TMDB_show_id,
+              data.seasons[i].season_number
+            );
+            if (season) {
+              tvShowSeasons.push(season);
+          }
         }
       }
     }
