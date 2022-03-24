@@ -142,6 +142,7 @@ type Topic = {
   upVoteIds: string[];
   downVoteIds: string[];
   replies: Reply[];
+  isReported: boolean;
 };
 
 interface UserTopic extends Topic {
@@ -149,14 +150,14 @@ interface UserTopic extends Topic {
 }
 
 type Reply = {
-  _id?: string;
-  topicId: number;
+  topicId: string;
   authorUserId: string;
   avatar: string;
   replierEpisodeUpTo: number;
   authorName: string;
   body: string;
   date: Date;
+  isReported: boolean;
 };
 
 type Report = {
