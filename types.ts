@@ -133,6 +133,7 @@ type Topic = {
   authorUserId: string;
   authorName: string;
   episodeCode: string;
+  authorEpisodeUpTo: number;
   title: string;
   body: string;
   numberOfReplies: number;
@@ -158,6 +159,7 @@ type Reply = {
   body: string;
   date: Date;
   isReported: boolean;
+  visible?: boolean;
 };
 
 type Report = {

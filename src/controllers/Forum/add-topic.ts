@@ -21,6 +21,7 @@ export const addTopic = async (req: Request, res: Response): Promise<void> => {
 		}
 		const TMDB_episode_id: number = tvShow.episodeIdUpTo;
 		const episodeCode: string = tvShow.episodeCodeUpTo;
+		const authorEpisodeUpTo: number = tvShow.episodesWatchedSoFar;
 		const user: User | null = await User.findOne({ _id: userId });
 		if (!user) {
 			res.status(400);
@@ -36,6 +37,7 @@ export const addTopic = async (req: Request, res: Response): Promise<void> => {
 			authorUserId: userId,
 			authorName: authorName,
 			episodeCode: episodeCode,
+			authorEpisodeUpTo: authorEpisodeUpTo,
 			title: title,
 			body: body,
 			numberOfReplies: 0,
@@ -47,7 +49,8 @@ export const addTopic = async (req: Request, res: Response): Promise<void> => {
 			replies: [],
 			isReported: false,
 		};
-	  await Topic.create(topic);
+		const dbTopic = await Topic.create(topic);
+		topic._id = dbTopic._id
 		const userTopic: UserTopic = { ...topic, userVote: 0 };
 		res.status(200);
 		res.send(userTopic);
