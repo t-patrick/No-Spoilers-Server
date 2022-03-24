@@ -51,6 +51,11 @@ export const updateEpisodesWatched = async (
     }
 		userTVShow.episodeCodeUpTo = newEpisodeCode;
 		userTVShow.episodeIdUpTo = newEpisodeId;
+		let current_poster_path: string | null | undefined;
+		if (tvShow.seasons) {
+			current_poster_path = tvShow.seasons[seasonNumber-1].poster_path
+		}
+		userTVShow.current_poster_path = current_poster_path;
 		const episodesWatchedSoFar = getEpisodesWatchedSoFar(
 			tvShow.seasons,
 			seasonNumber,
