@@ -25,6 +25,7 @@ const topicSchema = new mongoose.Schema<Topic>({
       authorName: String,
     }
   ],
+  isReported: Boolean,
 });
 
 const Topic = mongoose.model<Topic>('Topic', topicSchema);

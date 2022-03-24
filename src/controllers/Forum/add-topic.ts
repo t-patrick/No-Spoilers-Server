@@ -44,7 +44,8 @@ export const addTopic = async (req: Request, res: Response): Promise<void> => {
 			voteScore: 0,
 			upVoteIds: [],
 			downVoteIds: [],
-			replies: []
+			replies: [],
+			isReported: false,
 		};
 	  await Topic.create(topic);
 		const userTopic: UserTopic = { ...topic, userVote: 0 };

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import UserTVShow from '../../models/user-tv-show';
 import User from '../../models/db-user';
 import Topic from '../../models/topic';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
+import { collapseTextChangeRangesAcrossMultipleVersions, nodeModuleNameResolver } from 'typescript';
 
 /*
  * function to add reply
@@ -30,6 +30,7 @@ export const addReply = async (req: Request, res: Response): Promise<void> => {
 		const authorName: string = user.displayName;
 		const avatar: string = user.avatar;
 		const date = new Date();
+		const isReported: boolean = false;
 		await Topic.findOneAndUpdate(
 			{
 				_id: topicId
@@ -46,6 +47,7 @@ export const addReply = async (req: Request, res: Response): Promise<void> => {
 						replierEpisodeUpTo: episodesWatchedSoFar,
 						authorName: authorName,
 						body: body,
+						isReported: isReported,
 						date: date, } } }
 		);
 		const topic: Topic | null = await Topic.findOne({ _id: topicId });
