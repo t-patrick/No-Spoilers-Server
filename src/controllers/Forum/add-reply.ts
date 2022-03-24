@@ -30,29 +30,32 @@ export const addReply = async (req: Request, res: Response): Promise<void> => {
 		const authorName: string = user.displayName;
 		const avatar: string = user.avatar;
 		const date = new Date();
-		const isReported: boolean = false;
+		const reply: Reply = {
+			isReported: false,
+		  topicId: topicId,
+			authorUserId: userId,
+			avatar: avatar,
+			replierEpisodeUpTo: episodesWatchedSoFar,
+			authorName: authorName,
+			body: body,
+			date: date,
+		}
 		await Topic.findOneAndUpdate(
 			{
 				_id: topicId
 			},
 			{
 				$inc: {
-				numberOfReplies: 1
-			},
+					numberOfReplies: 1
+				},
 				$push: {
 					replies: {
-						topicId: topicId,
-						authorUserId: userId,
-						avatar: avatar,
-						replierEpisodeUpTo: episodesWatchedSoFar,
-						authorName: authorName,
-						body: body,
-						isReported: isReported,
-						date: date, } } }
+						...reply } } }
 		);
 		const topic: Topic | null = await Topic.findOne({ _id: topicId });
 		if (topic) {
-			const reply: Reply = topic.replies[topic.replies.length - 1]
+			const reply: Reply = topic.replies[topic.replies.length - 1];
+			console.log(reply)
 			res.status(200);
 			res.send(reply);
 		}

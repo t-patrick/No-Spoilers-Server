@@ -23,6 +23,7 @@ const topicSchema = new mongoose.Schema<Topic>({
       date: Date,
       avatar: String,
       authorName: String,
+      isReported: Boolean,
     }
   ],
   isReported: Boolean,
