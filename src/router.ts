@@ -15,6 +15,7 @@ import { addTopic } from './controllers/Forum/add-topic';
 import { deleteTopic } from './controllers/Forum/delete-topic';
 import { addReply } from './controllers/Forum/add-reply';
 import { deleteReply } from './controllers/Forum/delete-reply';
+import { onLoadForum } from './controllers/Forum/on-load-forum';
 
 const router = express.Router();
 
@@ -27,16 +28,18 @@ router.delete('/home/delete/:TMDB_show_Id', deleteTVShow);
 router.post('/quicksearch', searchDebounce);
 router.post('/search', searchEnter);
 
-router.get('/show/:TMDB_show_Id', onLoadShow);
+router.post('/show/:TMDB_show_Id', onLoadShow);
 router.patch('/show/:TMDB_show_Id', updateEpisodesWatched);
-router.get('/wayback/:TMDB_show_Id', onLoadWaybackUrls);
-router.get('/wayback/update/:TMDB_show_Id', onLoadWaybackUrls);
+router.post('/wayback/:TMDB_show_Id', onLoadWaybackUrls);
+router.post('/wayback/update/:TMDB_show_Id', onLoadWaybackUrls);
 
-router.get('/userwayback/:TMDB_show_Id', onLoadUserWayback);
+router.post('/userwayback/:TMDB_show_Id', onLoadUserWayback);
 router.post('/userwayback/add/:TMDB_show_Id', addUserWayback);
 router.delete('/userwayback/delete/:TMDB_show_Id', deleteUserWayback);
 router.patch('/userwayback/update/:TMDB_show_Id', updateUserWayback);
 
+router.post('/forum/:TMDB_show_Id', onLoadForum);
+router.post('/forum/update/:TMDB_show_Id', onLoadForum);
 router.post('/forum/topic/add/:TMDB_show_Id', addTopic);
 router.delete('/forum/topic/delete', deleteTopic);
 router.post('/forum/reply/add/:TMDB_show_Id', addReply);

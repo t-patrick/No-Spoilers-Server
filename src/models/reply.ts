@@ -9,6 +9,7 @@ const replySchema = new mongoose.Schema<Reply>({
   avatar: String,
   authorName: String,
   isReported: Boolean,
+  visible: Boolean,
 });
 
 const Reply = mongoose.model<Reply>('Reply', replySchema);

@@ -10,6 +10,7 @@ const topicSchema = new mongoose.Schema<Topic>({
   numberOfReplies: Number,
   avatar: String,
   episodeCode: String,
+  authorEpisodeUpTo: Number,
   date: Date,
   voteScore: Number,
   upVoteIds: [String],
@@ -24,6 +25,7 @@ const topicSchema = new mongoose.Schema<Topic>({
       avatar: String,
       authorName: String,
       isReported: Boolean,
+      visible: Boolean,
     }
   ],
   isReported: Boolean,
