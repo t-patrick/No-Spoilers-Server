@@ -27,18 +27,36 @@ export const addTVShow = async (req: Request, res: Response): Promise<void> => {
     }
     const { data }: AxiosTVShow = await axios.get(
       `${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
-    );
-    const newTVShow: UserTVShow = {
-      userId: userId,
-      TMDB_show_id: TMDB_show_id,
-      name: data.name,
-      poster_path: data.poster_path,
-      isCompleted: false,
-      episodeIdUpTo: 0,
-      episodeCodeUpTo: '',
-      episodeCodeNext: 's1e1',
-      episodesWatchedSoFar: 0,
-    };
+		);
+		let firstSeason: AxiosSeason[];
+		let newTVShow: UserTVShow;
+		if (data.seasons) {
+			firstSeason = data.seasons.filter(season => season.season_number === 1);
+			newTVShow = {
+				userId: userId,
+				TMDB_show_id: TMDB_show_id,
+				name: data.name,
+				poster_path: data.poster_path,
+				current_poster_path: firstSeason[0].poster_path,
+				isCompleted: false,
+				episodeIdUpTo: 0,
+				episodeCodeUpTo: '',
+				episodeCodeNext: 's1e1',
+				episodesWatchedSoFar: 0,
+			};
+		} else {
+			newTVShow = {
+				userId: userId,
+				TMDB_show_id: TMDB_show_id,
+				name: data.name,
+				poster_path: data.poster_path,
+				isCompleted: false,
+				episodeIdUpTo: 0,
+				episodeCodeUpTo: '',
+				episodeCodeNext: 's1e1',
+				episodesWatchedSoFar: 0,
+			};
+		}
     await UserTVShow.create(newTVShow);
     res.status(200);
     res.send(newTVShow);

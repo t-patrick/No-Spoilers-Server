@@ -5,10 +5,11 @@ const userTVShowSchema = new mongoose.Schema<UserTVShow>({
   TMDB_show_id: Number,
   name: String,
   poster_path: String,
+  current_poster_path: String,
   isCompleted: Boolean,
   episodeIdUpTo: Number,
   episodeCodeUpTo: String,
-  episodeCodeNext: String, 
+  episodeCodeNext: String,
   episodesWatchedSoFar: Number,
 });
 
