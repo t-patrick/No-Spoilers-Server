@@ -16,6 +16,8 @@ import { deleteTopic } from './controllers/Forum/delete-topic';
 import { addReply } from './controllers/Forum/add-reply';
 import { deleteReply } from './controllers/Forum/delete-reply';
 import { onLoadForum } from './controllers/Forum/on-load-forum';
+import { editTopic } from './controllers/Forum/edit-topic';
+import { editReply } from './controllers/Forum/edit-reply';
 
 const router = express.Router();
 
@@ -41,8 +43,10 @@ router.patch('/userwayback/update/:TMDB_show_Id', updateUserWayback);
 router.post('/forum/:TMDB_show_Id', onLoadForum);
 router.post('/forum/update/:TMDB_show_Id', onLoadForum);
 router.post('/forum/topic/add/:TMDB_show_Id', addTopic);
+router.patch('/forum/topic/edit', editTopic);
 router.delete('/forum/topic/delete', deleteTopic);
 router.post('/forum/reply/add/:TMDB_show_Id', addReply);
+router.patch('/forum/reply/edit', editReply);
 router.delete('/forum/reply/delete', deleteReply);
 
 export default router;
