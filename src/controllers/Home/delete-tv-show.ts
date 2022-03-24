@@ -12,7 +12,7 @@ export const deleteTVShow = async (req: Request, res: Response): Promise<void> =
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);
 		await UserTVShow.deleteOne({ userId: userId, TMDB_show_id: TMDB_show_id });
 		res.status(204);
-		res.end();
+		res.send();
 	} catch (e) {
 		console.error(e, 'deleteTVShow is failing');
 		res.status(500);

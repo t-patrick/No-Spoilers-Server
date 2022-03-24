@@ -25,7 +25,7 @@ export const addTVShow = async (req: Request, res: Response): Promise<void> => {
       );
       return;
     }
-    const { data } = await axios.get(
+    const { data }: AxiosTVShow = await axios.get(
       `${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
     );
     const newTVShow: UserTVShow = {

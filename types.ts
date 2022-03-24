@@ -40,8 +40,8 @@ type DBUser = {
 type UserTVShow = {
   userId: string;
   TMDB_show_id: number;
-  name: string;
-  poster_path: string;
+  name?: string;
+  poster_path?: string | null;
   isCompleted: boolean;
   episodeIdUpTo: number;
   episodeCodeUpTo: string;
