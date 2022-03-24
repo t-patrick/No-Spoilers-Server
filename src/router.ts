@@ -18,6 +18,8 @@ import { deleteReply } from './controllers/Forum/delete-reply';
 import { onLoadForum } from './controllers/Forum/on-load-forum';
 import { editTopic } from './controllers/Forum/edit-topic';
 import { editReply } from './controllers/Forum/edit-reply';
+import { upvoteTopic } from './controllers/Forum/upvote-topic';
+import { downvoteTopic } from './controllers/Forum/downvote-topic';
 
 const router = express.Router();
 
@@ -44,6 +46,8 @@ router.post('/forum/:TMDB_show_Id', onLoadForum);
 router.post('/forum/update/:TMDB_show_Id', onLoadForum);
 router.post('/forum/topic/add/:TMDB_show_Id', addTopic);
 router.patch('/forum/topic/edit', editTopic);
+router.patch('/forum/topic/upvote', upvoteTopic);
+router.patch('/forum/topic/downvote', downvoteTopic);
 router.delete('/forum/topic/delete', deleteTopic);
 router.post('/forum/reply/add/:TMDB_show_Id', addReply);
 router.patch('/forum/reply/edit', editReply);
