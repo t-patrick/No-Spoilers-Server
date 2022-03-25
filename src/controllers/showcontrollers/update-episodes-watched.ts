@@ -76,6 +76,7 @@ export const updateEpisodesWatched = async (
 			if (percentComplete === 100) {
 				userTVShow.isCompleted = true;
 				userTVShow.episodeCodeNext = '';
+				userTVShow.current_poster_path = '';
 			} else {
 				userTVShow.isCompleted = false;
 				if (tvShow.seasons[seasonNumber - 1].numberOfEpisodes === episodeNumber) {
