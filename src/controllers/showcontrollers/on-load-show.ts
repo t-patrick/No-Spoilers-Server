@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 import { Request, Response } from 'express';
+import FullTVShow from '../../models/full-tv-show';
 import UserTVShow from '../../models/user-tv-show';
 dotenv.config();
 const apiUrl = 'https://api.themoviedb.org/3/';
@@ -87,6 +88,12 @@ export const onLoadShow = async (
   try {
     const userId = req.body._id;
     const TMDB_show_id = Number(req.params.TMDB_show_Id);
+    const dbShow: TVShow | null = await FullTVShow.findOne({ TMDB_show_id: TMDB_show_id });
+    if (dbShow) {
+      res.status(200);
+      res.send(dbShow);
+      return;
+    }
     const axiosTVShow: AxiosTVShow  = await axios.get(
       `${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
     );
@@ -130,6 +137,7 @@ export const onLoadShow = async (
       seasons: tvShowSeasons,
       overview: data.overview,
     };
+    await FullTVShow.create(tvShow);
     res.status(200);
     res.send(tvShow);
   } catch (e) {

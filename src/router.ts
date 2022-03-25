@@ -33,7 +33,7 @@ router.post('/quicksearch', searchDebounce);
 router.post('/search', searchEnter);
 
 router.post('/show/:TMDB_show_Id', onLoadShow);
-router.patch('/show', updateEpisodesWatched);
+router.patch('/show/:TMDB_show_Id', updateEpisodesWatched);
 router.post('/wayback/:TMDB_show_Id', onLoadWaybackUrls);
 router.post('/wayback/update/:TMDB_show_Id', onLoadWaybackUrls);
 
