@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import FullTVShow from '../../models/full-tv-show';
 import UserTVShow from '../../models/user-tv-show';
 
 
@@ -34,23 +35,33 @@ export const updateEpisodesWatched = async (
     const userId: string = req.body._id;
 		const newEpisodeCode: string = req.body.newEpisodeCode;
 		const newEpisodeId: number = req.body.TMDB_episode_id;
-		const tvShow: TVShow = req.body.tvShow;
-		const TMDB_show_Id = tvShow.TMDB_show_id;
+		const TMDB_show_id = Number(req.params.TMDB_show_Id);
+		const tvShow: TVShow | null = await FullTVShow.findOne({TMDB_show_id: TMDB_show_id})
+		if (!tvShow) {
+			res.status(500);
+			res.send('Failed to find TV show in database');
+			return;
+}
     const episodeCodeArray: string[] = newEpisodeCode.slice(1).split('e');
     let seasonNumber = Number(episodeCodeArray[0]);
     let episodeNumber = Number(episodeCodeArray[1]);
     const numberOfEpisodes: number | undefined = tvShow.number_of_episodes;
     const userTVShow: UserTVShowUpdate | null = await UserTVShow.findOne({
       userId: userId,
-      TMDB_show_id: TMDB_show_Id,
+      TMDB_show_id: TMDB_show_id,
     });
     if (!userTVShow) {
       res.status(500);
-			res.send('Failed to find TV show');
+			res.send('Failed to find TV show in user database');
 			return;
     }
 		userTVShow.episodeCodeUpTo = newEpisodeCode;
 		userTVShow.episodeIdUpTo = newEpisodeId;
+		let current_poster_path: string | null | undefined;
+		if (tvShow.seasons) {
+			current_poster_path = tvShow.seasons[seasonNumber-1].poster_path
+		}
+		userTVShow.current_poster_path = current_poster_path;
 		const episodesWatchedSoFar = getEpisodesWatchedSoFar(
 			tvShow.seasons,
 			seasonNumber,
@@ -77,7 +88,7 @@ export const updateEpisodesWatched = async (
 				userTVShow.episodeCodeNext = newEpisodeCodeNext;
 			}
       await UserTVShow.findOneAndUpdate(
-        { userId: userId, TMDB_show_id: TMDB_show_Id },
+        { userId: userId, TMDB_show_id: TMDB_show_id },
 				userTVShow
       );
     }

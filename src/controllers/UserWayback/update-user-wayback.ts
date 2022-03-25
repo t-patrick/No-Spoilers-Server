@@ -43,14 +43,14 @@ export const updateUserWayback = async (req: Request, res: Response): Promise<vo
 			userId: userId, TMDB_show_id: TMDB_show_id
 		});
 		if (!user) {
-			res.status(400);
-			res.send('User not found in wayback database');
+			res.status(200);
+			res.send([]);
 			return;
 		}
 		const websites: Website[] | undefined = user.websites;
 		if (!websites || websites.length === 0) {
 			res.status(200);
-			res.send('No user wayback websites to update');
+			res.send([]);
 			return;
 		};
 		const nextEpisodeDate: string | undefined = await getNextEpisodeDate(userId, TMDB_show_id);

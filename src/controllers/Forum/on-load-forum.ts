@@ -6,7 +6,7 @@ import UserTVShow from '../../models/user-tv-show';
  * function to add visible flag to replies depending on the user's watched progress
  */
 
-const replyVisibleFlag = (filteredTopics: Topic[], episodeWatchFilter: number) => {
+const replyVisibleFlag = (filteredTopics: Topic[], episodeWatchFilter: number): Topic[] => {
 	for (let i = 0; i < filteredTopics.length; i++) {
 		filteredTopics[i].replies.forEach(reply => {
 			if (reply.replierEpisodeUpTo <= episodeWatchFilter) reply.visible = true;
@@ -14,6 +14,30 @@ const replyVisibleFlag = (filteredTopics: Topic[], episodeWatchFilter: number) =
 		})
 	}
 	return filteredTopics;
+};
+
+/*
+ * function to sort topics by season and popularity
+ */
+
+const sortTopics = (filteredTopics: Topic[], episodeCode: string): [Topic[]] => {
+	const episodeCodeArray: string[] = episodeCode.slice(1).split('e');
+	const seasonNumber = Number(episodeCodeArray[0]);
+	let sortedTopics: [Topic[]] = [[]];
+	for (let i = 1; i < seasonNumber; i++) {
+		sortedTopics.push([]);
+	}
+	for (let i = 0; i < filteredTopics.length; i++) {
+		const episodeCodeArray: string[] = filteredTopics[i].episodeCode.slice(1).split('e');
+		const seasonNumberMinusOne = Number(episodeCodeArray[0]) - 1;
+		sortedTopics[seasonNumberMinusOne].push(filteredTopics[i]);
+	}
+	for (let i = 0; i < sortedTopics.length; i++) {
+		sortedTopics[i].sort((a: Topic, b: Topic) => {
+			return b.voteScore - a.voteScore;
+		})
+	}
+	return sortedTopics;
 };
 
 /*
@@ -48,8 +72,9 @@ export const onLoadForum = async (req: Request, res: Response): Promise<void> =>
 			return;
 		}
 		const flaggedAndFilteredTopics = replyVisibleFlag(filteredTopics, episodeWatchFilter);
+		const sortedFlaggedAndFilteredTopics = sortTopics(flaggedAndFilteredTopics, user.episodeCodeUpTo);
 		res.status(200);
-		res.send(flaggedAndFilteredTopics);
+		res.send(sortedFlaggedAndFilteredTopics);
 	} catch (e) {
 		console.error(e, 'onLoadForum is failing');
 		res.status(500);

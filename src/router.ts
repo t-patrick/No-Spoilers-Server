@@ -16,6 +16,10 @@ import { deleteTopic } from './controllers/Forum/delete-topic';
 import { addReply } from './controllers/Forum/add-reply';
 import { deleteReply } from './controllers/Forum/delete-reply';
 import { onLoadForum } from './controllers/Forum/on-load-forum';
+import { editTopic } from './controllers/Forum/edit-topic';
+import { editReply } from './controllers/Forum/edit-reply';
+import { upvoteTopic } from './controllers/Forum/upvote-topic';
+import { downvoteTopic } from './controllers/Forum/downvote-topic';
 
 const router = express.Router();
 
@@ -29,7 +33,7 @@ router.post('/quicksearch', searchDebounce);
 router.post('/search', searchEnter);
 
 router.post('/show/:TMDB_show_Id', onLoadShow);
-router.patch('/show', updateEpisodesWatched);
+router.patch('/show/:TMDB_show_Id', updateEpisodesWatched);
 router.post('/wayback/:TMDB_show_Id', onLoadWaybackUrls);
 router.post('/wayback/update/:TMDB_show_Id', onLoadWaybackUrls);
 
@@ -41,8 +45,12 @@ router.patch('/userwayback/update/:TMDB_show_Id', updateUserWayback);
 router.post('/forum/:TMDB_show_Id', onLoadForum);
 router.post('/forum/update/:TMDB_show_Id', onLoadForum);
 router.post('/forum/topic/add/:TMDB_show_Id', addTopic);
+router.patch('/forum/topic/edit', editTopic);
+router.patch('/forum/topic/upvote', upvoteTopic);
+router.patch('/forum/topic/downvote', downvoteTopic);
 router.delete('/forum/topic/delete', deleteTopic);
 router.post('/forum/reply/add/:TMDB_show_Id', addReply);
+router.patch('/forum/reply/edit', editReply);
 router.delete('/forum/reply/delete', deleteReply);
 
 export default router;
