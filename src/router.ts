@@ -21,6 +21,7 @@ import { editReply } from './controllers/Forum/edit-reply';
 import { upvoteTopic } from './controllers/Forum/upvote-topic';
 import { downvoteTopic } from './controllers/Forum/downvote-topic';
 import { report } from './controllers/Forum/report';
+import { completeTVShow } from './controllers/Home/mark-tv-show-complete';
 
 const router = express.Router();
 
@@ -28,7 +29,8 @@ router.post('/register', createUser);
 router.post('/login', login);
 
 router.post('/home/add/:TMDB_show_Id', addTVShow);
-router.delete('/home/delete/:TMDB_show_Id', deleteTVShow);
+router.patch('/home/complete/:TMDB_show_Id', completeTVShow);
+router.post('/home/delete/:TMDB_show_Id', deleteTVShow);
 
 router.post('/quicksearch', searchDebounce);
 router.post('/search', searchEnter);
@@ -40,7 +42,7 @@ router.post('/wayback/update/:TMDB_show_Id', onLoadWaybackUrls);
 
 router.post('/userwayback/:TMDB_show_Id', onLoadUserWayback);
 router.post('/userwayback/add/:TMDB_show_Id', addUserWayback);
-router.delete('/userwayback/delete/:TMDB_show_Id', deleteUserWayback);
+router.post('/userwayback/delete/:TMDB_show_Id', deleteUserWayback);
 router.patch('/userwayback/update/:TMDB_show_Id', updateUserWayback);
 
 router.post('/forum/load/:TMDB_show_Id', onLoadForum);
@@ -49,10 +51,10 @@ router.post('/forum/topic/add/:TMDB_show_Id', addTopic);
 router.patch('/forum/topic/edit', editTopic);
 router.patch('/forum/topic/upvote', upvoteTopic);
 router.patch('/forum/topic/downvote', downvoteTopic);
-router.delete('/forum/topic/delete', deleteTopic);
+router.post('/forum/topic/delete', deleteTopic);
 router.post('/forum/reply/add/:TMDB_show_Id', addReply);
 router.patch('/forum/reply/edit', editReply);
-router.delete('/forum/reply/delete', deleteReply);
+router.post('/forum/reply/delete', deleteReply);
 router.post('/forum/report', report);
 
 export default router;
