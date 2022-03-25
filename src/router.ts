@@ -20,6 +20,7 @@ import { editTopic } from './controllers/Forum/edit-topic';
 import { editReply } from './controllers/Forum/edit-reply';
 import { upvoteTopic } from './controllers/Forum/upvote-topic';
 import { downvoteTopic } from './controllers/Forum/downvote-topic';
+import { report } from './controllers/Forum/report';
 
 const router = express.Router();
 
@@ -42,7 +43,7 @@ router.post('/userwayback/add/:TMDB_show_Id', addUserWayback);
 router.delete('/userwayback/delete/:TMDB_show_Id', deleteUserWayback);
 router.patch('/userwayback/update/:TMDB_show_Id', updateUserWayback);
 
-router.post('/forum/:TMDB_show_Id', onLoadForum);
+router.post('/forum/load/:TMDB_show_Id', onLoadForum);
 router.post('/forum/update/:TMDB_show_Id', onLoadForum);
 router.post('/forum/topic/add/:TMDB_show_Id', addTopic);
 router.patch('/forum/topic/edit', editTopic);
@@ -52,5 +53,6 @@ router.delete('/forum/topic/delete', deleteTopic);
 router.post('/forum/reply/add/:TMDB_show_Id', addReply);
 router.patch('/forum/reply/edit', editReply);
 router.delete('/forum/reply/delete', deleteReply);
+router.post('/forum/report', report);
 
 export default router;

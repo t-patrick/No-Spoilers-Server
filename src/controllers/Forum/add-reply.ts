@@ -55,7 +55,6 @@ export const addReply = async (req: Request, res: Response): Promise<void> => {
 		const topic: Topic | null = await Topic.findOne({ _id: topicId });
 		if (topic) {
 			const reply: Reply = topic.replies[topic.replies.length - 1];
-			console.log(reply)
 			res.status(200);
 			res.send(reply);
 		}

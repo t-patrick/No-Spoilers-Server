@@ -162,14 +162,15 @@ type Reply = {
   date: Date;
   isReported: boolean;
   visible?: boolean;
+  _id?: string;
 };
 
 type Report = {
-  reporterId: number;
-  offendingUserId: number;
+  reporterId: string;
+  offendingUserId: string;
   offenceType: string;
-  topicOrReply: 'Topic' | 'Reply';
-  itemId: number;
+  topicOrReply: Topic | Reply;
+  itemId: string;
   date: Date;
 };
 
