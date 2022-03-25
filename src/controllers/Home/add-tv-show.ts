@@ -29,32 +29,19 @@ export const addTVShow = async (req: Request, res: Response): Promise<void> => {
 		let newTVShow: UserTVShow;
 		const fullTVShow: TVShow | null = await FullTVShow.findOne({ TMDB_show_id: TMDB_show_id });
 		if (fullTVShow) {
-			if (fullTVShow.seasons) {
-				newTVShow = {
-					userId: userId,
-					TMDB_show_id: TMDB_show_id,
-					name: fullTVShow.name,
-					poster_path: fullTVShow.poster_path,
-					current_poster_path: fullTVShow.seasons[0].poster_path,
-					isCompleted: false,
-					episodeIdUpTo: 0,
-					episodeCodeUpTo: '',
-					episodeCodeNext: 's1e1',
-					episodesWatchedSoFar: 0,
-				};
-			} else {
-				newTVShow = {
-					userId: userId,
-					TMDB_show_id: TMDB_show_id,
-					name: fullTVShow.name,
-					poster_path: fullTVShow.poster_path,
-					isCompleted: false,
-					episodeIdUpTo: 0,
-					episodeCodeUpTo: '',
-					episodeCodeNext: 's1e1',
-					episodesWatchedSoFar: 0,
-				};
-			}
+			const current_poster_path: string | null | undefined = fullTVShow.seasons[0].poster_path
+			newTVShow = {
+				userId: userId,
+				TMDB_show_id: TMDB_show_id,
+				name: fullTVShow.name,
+				poster_path: fullTVShow.poster_path,
+				current_poster_path: current_poster_path,
+				isCompleted: false,
+				episodeIdUpTo: 0,
+				episodeCodeUpTo: '',
+				episodeCodeNext: 's1e1',
+				episodesWatchedSoFar: 0,
+			};
 			await UserTVShow.create(newTVShow);
 			res.status(200);
 			res.send(newTVShow);
@@ -64,37 +51,26 @@ export const addTVShow = async (req: Request, res: Response): Promise<void> => {
       `${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
 		);
 		let firstSeason: AxiosSeason[];
-
 		if (data.seasons) {
 			firstSeason = data.seasons.filter(season => season.season_number === 1);
+			const current_poster_path: string | null | undefined = firstSeason[0].poster_path
 			newTVShow = {
 				userId: userId,
 				TMDB_show_id: TMDB_show_id,
 				name: data.name,
 				poster_path: data.poster_path,
-				current_poster_path: firstSeason[0].poster_path,
+				current_poster_path: current_poster_path,
 				isCompleted: false,
 				episodeIdUpTo: 0,
 				episodeCodeUpTo: '',
 				episodeCodeNext: 's1e1',
 				episodesWatchedSoFar: 0,
 			};
-		} else {
-			newTVShow = {
-				userId: userId,
-				TMDB_show_id: TMDB_show_id,
-				name: data.name,
-				poster_path: data.poster_path,
-				isCompleted: false,
-				episodeIdUpTo: 0,
-				episodeCodeUpTo: '',
-				episodeCodeNext: 's1e1',
-				episodesWatchedSoFar: 0,
-			};
+			await UserTVShow.create(newTVShow);
+			res.status(200);
+			res.send(newTVShow);
+			return;
 		}
-    await UserTVShow.create(newTVShow);
-    res.status(200);
-    res.send(newTVShow);
   } catch (e) {
     console.error(e, 'addTVShow is failing');
     res.status(500);

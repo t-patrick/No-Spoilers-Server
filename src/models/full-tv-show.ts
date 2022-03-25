@@ -41,8 +41,17 @@ const fullTVShowSchema = new mongoose.Schema<TVShow>({
 			TMDB_episode_id: Number,
 			season_number: Number,
 			episode_number: Number,
+			air_date: String,
 		}]
 	}],
+	externalIds: {
+		imdb_id: String,
+		facebook_id: String,
+		instagram_id: String,
+		twitter_id: String,
+		wikipediaId: String,
+		homepage: String,
+	},
 	overview: String,
 });
 
