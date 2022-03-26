@@ -67,3 +67,13 @@ export const login = async (req: Request, res: Response) => {
     res.status(500).send(e.toString());
   }
 };
+
+export const authenticate = async (req: Request, res: Response) => {
+  try {
+    res.status(200);
+    res.send('token authenticated');
+  } catch (e: any) {
+    console.error('authenticate is failing');
+    res.status(500);
+  }
+};

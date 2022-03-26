@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { createUser, login } from './controllers/User/user-controller';
+import { authenticate, createUser, login } from './controllers/User/user-controller';
 import { onLoadShow } from './controllers/showcontrollers/on-load-show';
 import { onLoadWaybackUrls } from './controllers/Wayback/on-load-wayback';
 import { addTVShow } from './controllers/Home/add-tv-show';
@@ -24,11 +24,13 @@ import { report } from './controllers/Forum/report';
 import { completeTVShow } from './controllers/Home/mark-tv-show-complete';
 import { updateUser } from './controllers/Profile/update-user-details';
 import { authenticateToken } from './auth-middleware';
+import { updateAvatar } from './controllers/Profile/update-avatar';
 
 const router = express.Router();
 
 router.post('/register', createUser);
 router.post('/login', login);
+router.get('/authcheck', authenticateToken, authenticate);
 
 router.post('/home/add/:TMDB_show_Id', authenticateToken, addTVShow);
 router.patch('/home/complete/:TMDB_show_Id', authenticateToken, completeTVShow);
@@ -61,5 +63,6 @@ router.post('/forum/reply/delete', authenticateToken, deleteReply);
 router.post('/forum/report', authenticateToken, report);
 
 router.patch('/profile', authenticateToken, updateUser);
+router.patch('/profile/avatar', authenticateToken, updateAvatar);
 
 export default router;
