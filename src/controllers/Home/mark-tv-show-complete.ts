@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { setSyntheticLeadingComments } from 'typescript';
 import FullTVShow from '../../models/full-tv-show';
 import UserTVShow from '../../models/user-tv-show';
 

@@ -22,6 +22,7 @@ import { upvoteTopic } from './controllers/Forum/upvote-topic';
 import { downvoteTopic } from './controllers/Forum/downvote-topic';
 import { report } from './controllers/Forum/report';
 import { completeTVShow } from './controllers/Home/mark-tv-show-complete';
+import { updateUser } from './controllers/Profile/update-user-details';
 
 const router = express.Router();
 
@@ -56,5 +57,7 @@ router.post('/forum/reply/add/:TMDB_show_Id', addReply);
 router.patch('/forum/reply/edit', editReply);
 router.post('/forum/reply/delete', deleteReply);
 router.post('/forum/report', report);
+
+router.patch('/profile', updateUser);
 
 export default router;

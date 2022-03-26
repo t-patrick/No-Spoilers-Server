@@ -1,83 +1,27 @@
 import axios from 'axios';
-import * as dotenv from 'dotenv';
 import { Request, Response } from 'express';
-dotenv.config();
 import UserTVShow from '../../models/user-tv-show';
-const apiUrl = 'https://api.themoviedb.org/3/';
-const APIKEY = process.env.API_KEY;
+import FullTVShow from '../../models/full-tv-show';
 
-/*
- * function to call external ids from API and return required properties
- */
-
-const externalIdApiCall = async (
-  showId: number
-): Promise<ExternalIds | undefined> => {
-  try {
-    const { data } = await axios.get(
-      `${apiUrl}tv/${showId}/external_ids?api_key=${APIKEY}`
-    );
-    const externalIds: ExternalIds = {
-      imdb_id: data.imdb_id,
-      facebook_id: data.facebook_id,
-      instagram_id: data.instagram_id,
-      twitter_id: data.twitter_id,
-    };
-    return externalIds;
-  } catch (e) {
-    console.error(e, 'externalIdApiCall is failing');
-    return;
-  }
-};
-
-/*
- * function to convert external IDs to required urls
- */
-
-const externalIdReformat = (
-  externalIds: ExternalIds | undefined,
-  showName: string,
-  homepage: string
-): ExternalIds => {
-  const wikiName = showName.split(' ').join('_');
-  let externalUrls: ExternalIds;
-  if (externalIds) {
-    externalUrls = {
-      imdb_id: `https://www.imdb.com/title/${externalIds.imdb_id}/`,
-      facebook_id: `https://www.facebook.com/${externalIds.facebook_id}/`,
-      instagram_id: `https://www.instagram.com/${externalIds.instagram_id}/`,
-      twitter_id: `https://twitter.com/${externalIds.twitter_id}`,
-      wikipediaId: `https://en.wikipedia.org/wiki/${wikiName}`,
-      homepage: homepage,
-    };
-  } else {
-    externalUrls = {
-      wikipediaId: `https://en.wikipedia.org/wiki/${wikiName}`,
-      homepage: homepage,
-    };
-  }
-  return externalUrls;
-};
 
 /*
  * function to convert external urls to wayback urls
  */
 
 const externalUrlReformat = (
-  externalUrls: ExternalIds,
+  externalUrls: ExternalIds | undefined,
   nextEpisodeDate: string
 ): ExternalIds => {
   let year = Number(nextEpisodeDate.slice(0, 4));
   year--;
   const fromDate = `${year}0101`;
-  const waybackUrls: ExternalIds = {
-    imdb_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.imdb_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`,
-    facebook_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.facebook_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`,
-    instagram_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.instagram_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`,
-    twitter_id: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.twitter_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`,
-    wikipediaId: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.wikipediaId}&output=json&from=${fromDate}&to=${nextEpisodeDate}`,
-    homepage: `http://web.archive.org/cdx/search/cdx?url=${externalUrls.homepage}&output=json&from=${fromDate}&to=${nextEpisodeDate}`,
-  };
+	const waybackUrls: ExternalIds | undefined = {};
+	if (externalUrls?.imdb_id) waybackUrls.imdb_id = `http://web.archive.org/cdx/search/cdx?url=${externalUrls.imdb_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`;
+	if (externalUrls?.facebook_id) waybackUrls.facebook_id = `http://web.archive.org/cdx/search/cdx?url=${externalUrls.facebook_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`;
+	if (externalUrls?.instagram_id) waybackUrls.instagram_id = `http://web.archive.org/cdx/search/cdx?url=${externalUrls.instagram_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`;
+	if (externalUrls?.twitter_id) waybackUrls.twitter_id = `http://web.archive.org/cdx/search/cdx?url=${externalUrls.twitter_id}&output=json&from=${fromDate}&to=${nextEpisodeDate}`;
+	if (externalUrls?.wikipediaId) waybackUrls.wikipediaId = `http://web.archive.org/cdx/search/cdx?url=${externalUrls.wikipediaId}&output=json&from=${fromDate}&to=${nextEpisodeDate}`;
+	if (externalUrls?.homepage) waybackUrls.homepage = `http://web.archive.org/cdx/search/cdx?url=${externalUrls.homepage}&output=json&from=${fromDate}&to=${nextEpisodeDate}`;
   return waybackUrls;
 };
 
@@ -86,6 +30,7 @@ const externalUrlReformat = (
  */
 
 const getNextEpisodeDate = async (
+	fullTVShow: TVShow,
   userId: string,
   showId: number
 ): Promise<string | undefined> => {
@@ -102,11 +47,10 @@ const getNextEpisodeDate = async (
         .split('e');
       const seasonNumber = Number(nextEpisodeCodeArray[0]);
       const episodeNumber = Number(nextEpisodeCodeArray[1]);
-      const { data } = await axios.get(
-        `${apiUrl}tv/${showId}/season/${seasonNumber}/episode/${episodeNumber}?api_key=${APIKEY}`
-      );
+			const season = fullTVShow.seasons[seasonNumber - 1];
+			const episode = season.episodes[episodeNumber - 1];
       const regex = /-/g;
-      const airDateNoHyphen: string = data.air_date.replace(regex, '');
+      const airDateNoHyphen: string | undefined = episode.air_date?.replace(regex, '');
       return airDateNoHyphen;
     } else return;
   } catch (e) {
@@ -154,39 +98,33 @@ const waybackApiCalls = async (
  * function to load wayback occuring on load of show page
  */
 
-export const onLoadWaybackUrls = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const onLoadWaybackUrls = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId: string = req.body._id;
-    const TMDB_show_id = Number(req.params.TMDB_show_Id);
-    const { data } = await axios.get(
-      `${apiUrl}tv/${TMDB_show_id}?api_key=${APIKEY}`
-    );
-    const externalIds: ExternalIds | undefined = await externalIdApiCall(
-      TMDB_show_id
-    );
-    const externalUrls: ExternalIds = externalIdReformat(
-      externalIds,
-      data.name,
-      data.homepage
-    );
-    const nextEpisodeDate: string | undefined = await getNextEpisodeDate(
-      userId,
-      TMDB_show_id
-    );
-    if (nextEpisodeDate && nextEpisodeDate !== '') {
-      const waybackUrls: ExternalIds = externalUrlReformat(
-        externalUrls,
-        nextEpisodeDate
-      );
-      const finalUrls: ExternalIds = await waybackApiCalls(waybackUrls);
+		const TMDB_show_id = Number(req.params.TMDB_show_Id);
+		const fullTVShow: TVShow | null = await FullTVShow.findOne({ TMDB_show_id: TMDB_show_id });
+		if (!fullTVShow) {
+			res.status(400);
+			res.send('TV show does not exist in full tv show database');
+			return;
+		}
+		const nextEpisodeDate: string | undefined = await getNextEpisodeDate(
+			fullTVShow,
+			userId,
+			TMDB_show_id
+		);
+		if (nextEpisodeDate && nextEpisodeDate !== '') {
+			const waybackUrls: ExternalIds = externalUrlReformat(
+				fullTVShow.externalIds,
+				nextEpisodeDate
+			);
+			const finalUrls: ExternalIds = await waybackApiCalls(waybackUrls);
+			res.status(200);
+			res.send(finalUrls);
+			return;
+		} else {
       res.status(200);
-      res.send(finalUrls);
-    } else {
-      res.status(200);
-      res.send(externalUrls);
+      res.send(fullTVShow.externalIds);
     }
   } catch (e) {
     console.error(e, 'onLoadWaybackUrls is failing');

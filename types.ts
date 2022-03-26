@@ -80,6 +80,7 @@ type Episode = {
   TMDB_episode_id?: number;
   season_number: number;
   episode_number: number;
+  air_date?: string;
 };
 
 interface EpisodefromAPI extends Episode {
@@ -103,6 +104,7 @@ type TVShow = {
   percentComplete: number;
   seasons: Array<Season>;
   overview?: string;
+  externalIds?: ExternalIds;
 };
 
 type ExternalIds = {
