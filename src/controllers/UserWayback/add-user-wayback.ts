@@ -1,17 +1,15 @@
 import axios from 'axios';
-import * as dotenv from 'dotenv';
 import { Request, Response } from 'express';
-dotenv.config();
 import UserExternalId from '../../models/user-external-id';
 import UserTVShow from '../../models/user-tv-show';
-const apiUrl = 'https://api.themoviedb.org/3/';
-const APIKEY = process.env.API_KEY;
+import FullTVShow from '../../models/full-tv-show';
 
 /*
  * function to get next episode date for a user's tv show
  */
 
 const getNextEpisodeDate = async (
+  fullTVShow: TVShow,
   userId: string,
   showId: number
 ): Promise<string | undefined> => {
@@ -28,11 +26,10 @@ const getNextEpisodeDate = async (
         .split('e');
       const seasonNumber = Number(nextEpisodeCodeArray[0]);
       const episodeNumber = Number(nextEpisodeCodeArray[1]);
-      const { data } = await axios.get(
-        `${apiUrl}tv/${showId}/season/${seasonNumber}/episode/${episodeNumber}?api_key=${APIKEY}`
-      );
+      const season = fullTVShow.seasons[seasonNumber - 1];
+      const episode = season.episodes[episodeNumber - 1];
       const regex = /-/g;
-      const airDateNoHyphen: string = data.air_date.replace(regex, '');
+      const airDateNoHyphen: string | undefined = episode.air_date?.replace(regex, '');
       return airDateNoHyphen;
     } else return;
   } catch (e) {
@@ -106,7 +103,14 @@ export const addUserWayback = async (
         return;
       }
     }
+    const fullTVShow: TVShow | null = await FullTVShow.findOne({ TMDB_show_id: TMDB_show_id });
+    if (!fullTVShow) {
+      res.status(400);
+      res.send('TV show does not exist in full tv show database');
+      return;
+    }
     const nextEpisodeDate: string | undefined = await getNextEpisodeDate(
+      fullTVShow,
       userId,
       TMDB_show_id
     );
