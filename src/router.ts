@@ -23,13 +23,14 @@ import { downvoteTopic } from './controllers/Forum/downvote-topic';
 import { report } from './controllers/Forum/report';
 import { completeTVShow } from './controllers/Home/mark-tv-show-complete';
 import { updateUser } from './controllers/Profile/update-user-details';
+import { authenticateToken } from './auth-middleware';
 
 const router = express.Router();
 
 router.post('/register', createUser);
 router.post('/login', login);
 
-router.post('/home/add/:TMDB_show_Id', addTVShow);
+router.post('/home/add/:TMDB_show_Id', authenticateToken, addTVShow);
 router.patch('/home/complete/:TMDB_show_Id', completeTVShow);
 router.post('/home/delete/:TMDB_show_Id', deleteTVShow);
 

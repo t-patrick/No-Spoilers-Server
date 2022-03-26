@@ -2,13 +2,23 @@ import { Request, Response } from 'express';
 import { createDBUser, loginCheck } from './db-user-interface';
 import User from '../../models/db-user';
 import UserTVShow from '../../models/user-tv-show';
+import Jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
+dotenv.config();
+const TOKEN_SECRET: string = process.env.TOKEN_SECRET || 'needamoresecuresecret';
+
+const generateAccessToken = (id: string): string => {
+  return Jwt.sign({ id: id }, TOKEN_SECRET, { expiresIn: 60 * 60 });
+}
 
 const onLoadHome = async (email: string): Promise<User | undefined> => {
   try {
     const user: User | null = await User.findOne({ email: email });
     let tvShows: UserTVShow[] | undefined;
+    let accessToken: string = '';
     if (user) {
       tvShows = await UserTVShow.find({ userId: user._id });
+      accessToken = generateAccessToken(user._id);
     }
     let result: User | undefined;
     if (user) {
@@ -18,6 +28,7 @@ const onLoadHome = async (email: string): Promise<User | undefined> => {
         displayName: user.displayName,
         avatar: user.avatar,
         userTVInfo: tvShows,
+        token: accessToken,
       };
       return result;
     }
