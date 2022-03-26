@@ -30,6 +30,7 @@ const router = express.Router();
 
 router.post('/register', createUser);
 router.post('/login', login);
+router.get('/authcheck', authenticateToken);
 
 router.post('/home/add/:TMDB_show_Id', authenticateToken, addTVShow);
 router.patch('/home/complete/:TMDB_show_Id', authenticateToken, completeTVShow);
