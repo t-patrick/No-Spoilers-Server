@@ -9,12 +9,12 @@ import UserTVShow from '../../models/user-tv-show';
 
 export const completeTVShow = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const userId: string = req.body._id;
+		const userId: string = req.body.id.id;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);
 		const tvShow: TVShow | null = await FullTVShow.findOne({ TMDB_show_id: TMDB_show_id })
 		if (!tvShow) {
 			res.status(500);
-			res.send('Failed to find TV show in database');
+			res.send('Failed to find TV show in database. Visit the shwo page first.');
 			return;
 		};
 		const userTVShow: UserTVShowUpdate | null = await UserTVShow.findOne({

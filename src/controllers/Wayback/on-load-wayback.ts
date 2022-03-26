@@ -100,7 +100,7 @@ const waybackApiCalls = async (
 
 export const onLoadWaybackUrls = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId: string = req.body._id;
+    const userId: string = req.body.id.id;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);
 		const fullTVShow: TVShow | null = await FullTVShow.findOne({ TMDB_show_id: TMDB_show_id });
 		if (!fullTVShow) {

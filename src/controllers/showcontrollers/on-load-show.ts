@@ -137,7 +137,7 @@ const externalIdReformat = (
 
 export const onLoadShow = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.body._id;
+    const userId = req.body.id.id;
     const TMDB_show_id = Number(req.params.TMDB_show_Id);
     const dbShow: TVShow | null = await FullTVShow.findOne({ TMDB_show_id: TMDB_show_id });
     if (dbShow) {

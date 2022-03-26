@@ -8,7 +8,7 @@ dotenv.config();
 const TOKEN_SECRET: string = process.env.TOKEN_SECRET || 'needamoresecuresecret';
 
 const generateAccessToken = (id: string): string => {
-  return Jwt.sign({ id: id }, TOKEN_SECRET, { expiresIn: 60 * 60 });
+  return Jwt.sign({ id: id }, TOKEN_SECRET, { expiresIn: 24 * 60 * 60 });
 }
 
 const onLoadHome = async (email: string): Promise<User | undefined> => {

@@ -84,7 +84,7 @@ export const addUserWayback = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId: string = req.body._id;
+    const userId: string = req.body.id.id;
     const website: string = req.body.website;
     const TMDB_show_id = Number(req.params.TMDB_show_Id);
     let finalUrl: string;
