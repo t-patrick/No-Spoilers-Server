@@ -92,11 +92,16 @@ export const updateUser = async (req: Request, res: Response) => {
 				currentUser.displayName = displayName;
 				displayChanged = true;
 			}
-			const newUser: DBUser | null = await User.findOneAndUpdate({ _id: userId }, { $set: currentUser }, {new: true});
+			const newUser: DBUser | null = await User.findOneAndUpdate({ _id: userId }, { $set: currentUser }, { new: true });
 			res.status(200);
 			res.send(newUser);
 			if (avatarChanged) {
-				await Topic.updateMany();
+				await Topic.updateMany({ authorUserId: userId }, { $set: { avatar: avatar } });
+				await Topic.updateMany({ "replies.authorUserId": userId }, { $set: { "replies.$.avatar": avatar } });
+			};
+			if (displayChanged) {
+				await Topic.updateMany({ authorUserId: userId }, { $set: { authorName: displayName } });
+				await Topic.updateMany({ "replies.authorUserId": userId }, { $set: { "replies.$.authorName": displayName } });
 			};
 		}
 	} catch (e: any) {

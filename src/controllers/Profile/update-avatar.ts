@@ -26,7 +26,8 @@ export const updateAvatar = async (req: Request, res: Response) => {
 		res.status(200);
 		res.send(newUser);
 		if (avatarChanged) {
-			await Topic.updateMany();
+			await Topic.updateMany({ authorUserId: userId }, { $set: { avatar: avatar } });
+			await Topic.updateMany({ "replies.authorUserId": userId }, { $set: { "replies.$.avatar": avatar } });
 		};
 	}  catch (e: any) {
 		console.error('updateAvatar is failing');
