@@ -7,7 +7,7 @@ import UserExternalId from '../../models/user-external-id';
 
 export const deleteUserWayback = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const userId: string = req.body._id;
+		const userId: string = req.body.id.id;
 		const website: string = req.body.website;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);
 		const deleted: ModificationResponse  = await UserExternalId.updateOne({

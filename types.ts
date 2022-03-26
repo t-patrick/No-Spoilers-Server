@@ -19,6 +19,7 @@ type User = {
   displayName: string;
   avatar: string;
   userTVInfo?: Array<UserTVShow>;
+  token: string;
 };
 
 /**

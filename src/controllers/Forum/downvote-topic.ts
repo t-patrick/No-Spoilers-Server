@@ -7,7 +7,7 @@ import Topic from '../../models/topic';
 
 export const downvoteTopic = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const userId: string = req.body._id;
+		const userId: string = req.body.id.id;
 		const topicId: string = req.body.topicId;
 		const match: Topic | null = await Topic.findOne({ _id: topicId, authorUserId: userId });
 		if (match) {

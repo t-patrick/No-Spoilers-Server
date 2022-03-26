@@ -49,7 +49,7 @@ export const updateUser = async (req: Request, res: Response) => {
 			res.send('Email or password is missing');
 			return;
 		}
-		const userId: string = req.body._id;
+		const userId: string = req.body.id.id;
 		const password: string = req.body.password;
 		const currentUser: DBUser | null = await User.findOne({ _id: userId });
 		if (currentUser) {
@@ -89,7 +89,7 @@ export const updateUser = async (req: Request, res: Response) => {
 		}
 	} catch (e: any) {
 		if (e.code === 11000) {
-			console.error('Email already in use, please choose another');
+			console.error(e, 'Email or display name already in use, please choose another');
 		}
 		console.error('updateUser is failing');
 		res.status(500);

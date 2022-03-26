@@ -32,7 +32,7 @@ export const updateEpisodesWatched = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId: string = req.body._id;
+    const userId: string = req.body.id.id;
 		const newEpisodeCode: string = req.body.newEpisodeCode;
 		const newEpisodeId: number = req.body.TMDB_episode_id;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);

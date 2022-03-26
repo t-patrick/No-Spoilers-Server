@@ -9,7 +9,7 @@ import Report from '../../models/report';
 
 export const report = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const reporterId: string = req.body.reporterId;
+		const reporterId: string = req.body.id.id;
 		const offendingUserId: string = req.body.offendingUserId;
 		const offenceType: string = req.body.offenceType;
 		const type: string = req.body.type;

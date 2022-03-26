@@ -13,7 +13,7 @@ const APIKEY = process.env.API_KEY;
 
 export const addTVShow = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId: string = req.body._id;
+		const userId: string = req.body.id.id;
     const TMDB_show_id = Number(req.params.TMDB_show_Id);
     const tvShow: UserTVShow | null = await UserTVShow.findOne({
       userId: userId,

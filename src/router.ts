@@ -23,41 +23,43 @@ import { downvoteTopic } from './controllers/Forum/downvote-topic';
 import { report } from './controllers/Forum/report';
 import { completeTVShow } from './controllers/Home/mark-tv-show-complete';
 import { updateUser } from './controllers/Profile/update-user-details';
+import { authenticateToken } from './auth-middleware';
 
 const router = express.Router();
 
 router.post('/register', createUser);
 router.post('/login', login);
 
-router.post('/home/add/:TMDB_show_Id', addTVShow);
-router.patch('/home/complete/:TMDB_show_Id', completeTVShow);
-router.post('/home/delete/:TMDB_show_Id', deleteTVShow);
+router.post('/home/add/:TMDB_show_Id', authenticateToken, addTVShow);
+router.patch('/home/complete/:TMDB_show_Id', authenticateToken, completeTVShow);
+router.delete('/home/delete/:TMDB_show_Id', authenticateToken, deleteTVShow);
 
 router.post('/quicksearch', searchDebounce);
 router.post('/search', searchEnter);
 
-router.post('/show/:TMDB_show_Id', onLoadShow);
-router.patch('/show/:TMDB_show_Id', updateEpisodesWatched);
-router.post('/wayback/:TMDB_show_Id', onLoadWaybackUrls);
-router.post('/wayback/update/:TMDB_show_Id', onLoadWaybackUrls);
+router.get('/show/:TMDB_show_Id', authenticateToken, onLoadShow);
+router.patch('/show/:TMDB_show_Id', authenticateToken, updateEpisodesWatched);
 
-router.post('/userwayback/:TMDB_show_Id', onLoadUserWayback);
-router.post('/userwayback/add/:TMDB_show_Id', addUserWayback);
-router.post('/userwayback/delete/:TMDB_show_Id', deleteUserWayback);
-router.patch('/userwayback/update/:TMDB_show_Id', updateUserWayback);
+router.get('/wayback/:TMDB_show_Id', authenticateToken, onLoadWaybackUrls);
+router.get('/wayback/update/:TMDB_show_Id', authenticateToken, onLoadWaybackUrls);
 
-router.post('/forum/load/:TMDB_show_Id', onLoadForum);
-router.post('/forum/update/:TMDB_show_Id', onLoadForum);
-router.post('/forum/topic/add/:TMDB_show_Id', addTopic);
-router.patch('/forum/topic/edit', editTopic);
-router.patch('/forum/topic/upvote', upvoteTopic);
-router.patch('/forum/topic/downvote', downvoteTopic);
-router.post('/forum/topic/delete', deleteTopic);
-router.post('/forum/reply/add/:TMDB_show_Id', addReply);
-router.patch('/forum/reply/edit', editReply);
-router.post('/forum/reply/delete', deleteReply);
-router.post('/forum/report', report);
+router.get('/userwayback/:TMDB_show_Id', authenticateToken, onLoadUserWayback);
+router.post('/userwayback/add/:TMDB_show_Id', authenticateToken, addUserWayback);
+router.post('/userwayback/delete/:TMDB_show_Id', authenticateToken, deleteUserWayback);
+router.patch('/userwayback/update/:TMDB_show_Id', authenticateToken, updateUserWayback);
 
-router.patch('/profile', updateUser);
+router.get('/forum/load/:TMDB_show_Id', authenticateToken, onLoadForum);
+router.get('/forum/update/:TMDB_show_Id', authenticateToken, onLoadForum);
+router.post('/forum/topic/add/:TMDB_show_Id', authenticateToken, addTopic);
+router.patch('/forum/topic/edit', authenticateToken, editTopic);
+router.patch('/forum/topic/upvote', authenticateToken, upvoteTopic);
+router.patch('/forum/topic/downvote', authenticateToken, downvoteTopic);
+router.post('/forum/topic/delete', authenticateToken, deleteTopic);
+router.post('/forum/reply/add/:TMDB_show_Id', authenticateToken, addReply);
+router.patch('/forum/reply/edit', authenticateToken, editReply);
+router.post('/forum/reply/delete', authenticateToken, deleteReply);
+router.post('/forum/report', authenticateToken, report);
+
+router.patch('/profile', authenticateToken, updateUser);
 
 export default router;

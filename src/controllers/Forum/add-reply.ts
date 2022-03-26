@@ -10,7 +10,7 @@ import { collapseTextChangeRangesAcrossMultipleVersions, nodeModuleNameResolver 
 
 export const addReply = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const userId: string = req.body._id;
+		const userId: string = req.body.id.id;
 		const body: string = req.body.body;
 		const topicId: string = req.body.topicId;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);

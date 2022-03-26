@@ -9,7 +9,7 @@ import Topic from '../../models/topic';
 
 export const addTopic = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const userId: string = req.body._id;
+		const userId: string = req.body.id.id;
 		const title: string = req.body.title;
 		const body: string = req.body.body;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);

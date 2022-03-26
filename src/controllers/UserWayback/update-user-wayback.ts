@@ -48,7 +48,7 @@ const getNextEpisodeDate = async (
 
 export const updateUserWayback = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const userId: string = req.body._id;
+		const userId: string = req.body.id.id;
 		const TMDB_show_id = Number(req.params.TMDB_show_Id);
 		const user: UserExternalIds | null = await UserExternalId.findOne({
 			userId: userId, TMDB_show_id: TMDB_show_id
@@ -79,7 +79,6 @@ export const updateUserWayback = async (req: Request, res: Response): Promise<vo
 			let year: number = Number(nextEpisodeDate.slice(0, 4));
 			year--;
 			const fromDate: string = `${year}0101`
-			console.log(websites, 'web')
 			for (let i = 0; i < websites.length; i++) {
 				const { data } = await axios.get(`http://web.archive.org/cdx/search/cdx?url=${websites[i].name}&output=json&from=${fromDate}&to=${nextEpisodeDate}`);
 				if (data.length) {
