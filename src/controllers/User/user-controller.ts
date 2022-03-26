@@ -70,8 +70,15 @@ export const login = async (req: Request, res: Response) => {
 
 export const authenticate = async (req: Request, res: Response) => {
   try {
-    res.status(200);
-    res.send('token authenticated');
+    const userId: string = req.body.id.id;
+    const currentUser: DBUser | null = await User.findOne({ _id: userId });
+    if (!currentUser) {
+      res.status(400);
+      res.send('User not found');
+      return;
+    }
+    const result = await onLoadHome(currentUser.email);
+    res.status(200).send(result);
   } catch (e: any) {
     console.error('authenticate is failing');
     res.status(500);
