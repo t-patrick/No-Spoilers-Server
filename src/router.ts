@@ -24,6 +24,7 @@ import { report } from './controllers/Forum/report';
 import { completeTVShow } from './controllers/Home/mark-tv-show-complete';
 import { updateUser } from './controllers/Profile/update-user-details';
 import { authenticateToken } from './auth-middleware';
+import { updateAvatar } from './controllers/Profile/update-avatar';
 
 const router = express.Router();
 
@@ -61,5 +62,6 @@ router.post('/forum/reply/delete', authenticateToken, deleteReply);
 router.post('/forum/report', authenticateToken, report);
 
 router.patch('/profile', authenticateToken, updateUser);
+router.patch('/profile/avatar', authenticateToken, updateAvatar);
 
 export default router;

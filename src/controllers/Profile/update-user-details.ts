@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import User from '../../models/db-user';
 import bcrypt from 'bcrypt';
+import Topic from '../../models/topic';
 
 const saltRounds = 10;
 
@@ -81,11 +82,22 @@ export const updateUser = async (req: Request, res: Response) => {
 				}
 			}
 			if (email !== currentUser.email) currentUser.email = email;
-			if (avatar && avatar !== currentUser.avatar) currentUser.avatar = avatar;
-			if (displayName && displayName !== currentUser.displayName) currentUser.displayName = displayName;
+			let avatarChanged: boolean = false;
+			let displayChanged: boolean = false;
+			if (avatar && avatar !== currentUser.avatar) {
+				currentUser.avatar = avatar;
+				avatarChanged = true;
+			}
+			if (displayName && displayName !== currentUser.displayName) {
+				currentUser.displayName = displayName;
+				displayChanged = true;
+			}
 			const newUser: DBUser | null = await User.findOneAndUpdate({ _id: userId }, { $set: currentUser }, {new: true});
 			res.status(200);
 			res.send(newUser);
+			if (avatarChanged) {
+				await Topic.updateMany();
+			};
 		}
 	} catch (e: any) {
 		if (e.code === 11000) {
