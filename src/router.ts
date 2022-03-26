@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { createUser, login } from './controllers/User/user-controller';
+import { authenticate, createUser, login } from './controllers/User/user-controller';
 import { onLoadShow } from './controllers/showcontrollers/on-load-show';
 import { onLoadWaybackUrls } from './controllers/Wayback/on-load-wayback';
 import { addTVShow } from './controllers/Home/add-tv-show';
@@ -30,7 +30,7 @@ const router = express.Router();
 
 router.post('/register', createUser);
 router.post('/login', login);
-router.get('/authcheck', authenticateToken);
+router.get('/authcheck', authenticateToken, authenticate);
 
 router.post('/home/add/:TMDB_show_Id', authenticateToken, addTVShow);
 router.patch('/home/complete/:TMDB_show_Id', authenticateToken, completeTVShow);
