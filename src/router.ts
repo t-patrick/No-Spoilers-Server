@@ -1,5 +1,9 @@
 import express, { Request, Response } from 'express';
-import { authenticate, createUser, login } from './controllers/User/user-controller';
+import {
+  authenticate,
+  createUser,
+  login,
+} from './controllers/User/user-controller';
 import { onLoadShow } from './controllers/showcontrollers/on-load-show';
 import { onLoadWaybackUrls } from './controllers/Wayback/on-load-wayback';
 import { addTVShow } from './controllers/Home/add-tv-show';
@@ -43,12 +47,28 @@ router.get('/show/:TMDB_show_Id', authenticateToken, onLoadShow);
 router.patch('/show/:TMDB_show_Id', authenticateToken, updateEpisodesWatched);
 
 router.get('/wayback/:TMDB_show_Id', authenticateToken, onLoadWaybackUrls);
-router.get('/wayback/update/:TMDB_show_Id', authenticateToken, onLoadWaybackUrls);
+router.get(
+  '/wayback/update/:TMDB_show_Id',
+  authenticateToken,
+  onLoadWaybackUrls
+);
 
 router.get('/userwayback/:TMDB_show_Id', authenticateToken, onLoadUserWayback);
-router.post('/userwayback/add/:TMDB_show_Id', authenticateToken, addUserWayback);
-router.post('/userwayback/delete/:TMDB_show_Id', authenticateToken, deleteUserWayback);
-router.patch('/userwayback/update/:TMDB_show_Id', authenticateToken, updateUserWayback);
+router.post(
+  '/userwayback/add/:TMDB_show_Id',
+  authenticateToken,
+  addUserWayback
+);
+router.post(
+  '/userwayback/delete/:TMDB_show_Id',
+  authenticateToken,
+  deleteUserWayback
+);
+router.patch(
+  '/userwayback/update/:TMDB_show_Id',
+  authenticateToken,
+  updateUserWayback
+);
 
 router.get('/forum/load/:TMDB_show_Id', authenticateToken, onLoadForum);
 router.get('/forum/update/:TMDB_show_Id', authenticateToken, onLoadForum);
