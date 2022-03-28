@@ -9,10 +9,40 @@ import http from 'http';
 
 const app = express();
 const server = http.createServer(app);
-export const io = new Server(server, {
+const io = new Server(server, {
   cors: {
     origin: '*',
   },
+});
+
+const waiting: ChatRequest[] = [];
+const paused: ChatRequest[] = [];
+const chats: ChatObject[] = [];
+
+io.on("connection", socket => {
+  socket.on("request", newRequest => {
+    console.log('a user connected');
+    newRequest.socketId = socket.id;
+    waiting.push(newRequest);
+    const match = waiting.filter(chatRequest => chatRequest.showId === newRequest.showId && chatRequest.episodeId === newRequest.episodeId);
+    if (match) {
+      const response: chatResponse[] = match.map(obj => { return { socketId: obj.socketId, displayName: obj.displayName, avatar: obj.avatar } })
+      io.to(socket.id).emit('subscribed', response);
+      const otherUsers: string[] = match.map(obj => obj.socketId);
+      const resp: chatResponse = {
+        socketId: newRequest.socketId,
+        displayName: newRequest.displayName,
+        avatar: newRequest.avatar
+      };
+      io.to(otherUsers).emit('found', resp);
+    } else {
+      io.to(socket.id).emit('subscribed', []);
+    };
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
 });
 
 app.use(cors());
