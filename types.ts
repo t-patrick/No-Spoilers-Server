@@ -302,18 +302,38 @@ type Chatter = {
   showId: number;
 };
 
-type ChatObject = {
-  roomID: string;
-  display1: string;
-  avatar1: string;
-  display2: string;
-  avatar2: string;
-}
-
 type Message = {
   receiverId: string;
+  senderId: string
   displayName: string;
   avatar: string;
   message: string;
+  showName: string;
   showId: number;
+  date: Date;
+};
+
+type PausedState = {
+  userId: string;
+  isPaused: boolean;
+}
+
+
+type TVShowChats = {
+  showId: number;
+  showName: string;
+  chats: Array<Chat>;
+};
+
+type Chat = {
+  chatterId: string;
+  displayName: string;
+  avatar: string;
+  showId: number;
+  messages: Array<Message>;
+};
+
+type ChatConnect = {
+  isPaused: boolean;
+  chatsCollection: TVShowChats[];
 }
