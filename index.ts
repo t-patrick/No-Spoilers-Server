@@ -28,7 +28,7 @@ io.on("connection", socket => {
     if (!duplicate) {
       waiting.push(newRequest);
     }
-    if (match) {
+    if (match.length > 0) {
       const response: chatResponse[] = match.map(obj => { return { socketId: obj.socketId, displayName: obj.displayName, avatar: obj.avatar } })
       io.to(socket.id).emit('subscribed', response);
       const otherUsers: string[] = match.map(obj => obj.socketId);
