@@ -280,3 +280,30 @@ type AxiosAPICallSeason = {
     poster_path?: string | null
   };
 };
+
+/**
+ * Socket types
+ */
+
+type ChatRequest = {
+  socketId: string,
+  userId: string,
+  showId: number,
+  episodeId: number,
+  displayName: string,
+  avatar: string
+};
+
+type chatResponse = {
+  socketId: string,
+  displayName: string,
+  avatar: string
+};
+
+type ChatObject = {
+  roomID: string;
+  display1: string;
+  avatar1: string;
+  display2: string;
+  avatar2: string;
+}
