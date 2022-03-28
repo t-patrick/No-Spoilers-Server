@@ -286,18 +286,20 @@ type AxiosAPICallSeason = {
  */
 
 type ChatRequest = {
-  socketId: string,
-  userId: string,
-  showId: number,
-  episodeId: number,
-  displayName: string,
-  avatar: string
+  socketId: string;
+  userId: string;
+  showId: number;
+  episodeId: number;
+  displayName: string;
+  avatar: string;
 };
 
-type chatResponse = {
-  socketId: string,
-  displayName: string,
-  avatar: string
+type Chatter = {
+  socketId: string;
+  userId: string;
+  displayName: string;
+  avatar: string;
+  showId: number;
 };
 
 type ChatObject = {
@@ -306,4 +308,12 @@ type ChatObject = {
   avatar1: string;
   display2: string;
   avatar2: string;
+}
+
+type Message = {
+  receiverId: string;
+  displayName: string;
+  avatar: string;
+  message: string;
+  showId: number;
 }
