@@ -20,8 +20,8 @@ const paused: ChatRequest[] = [];
 const chats: ChatObject[] = [];
 
 io.on("connection", socket => {
+  console.log('a user connected');
   socket.on("request", newRequest => {
-    console.log('a user connected');
     newRequest.socketId = socket.id;
     const match = waiting.filter(chatRequest => chatRequest.showId === newRequest.showId && chatRequest.episodeId === newRequest.episodeId);
     const duplicate = waiting.filter(object => object.userId === newRequest.userId && object.showId === newRequest.showId)
