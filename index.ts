@@ -23,7 +23,10 @@ io.on("connection", socket => {
   socket.on("request", newRequest => {
     console.log('a user connected');
     newRequest.socketId = socket.id;
-    waiting.push(newRequest);
+    const duplicate = waiting.filter(object => object.userId === newRequest.userId && object.showId === newRequest.showId)
+    if (!duplicate) {
+      waiting.push(newRequest);
+    }
     const match = waiting.filter(chatRequest => chatRequest.showId === newRequest.showId && chatRequest.episodeId === newRequest.episodeId);
     if (match) {
       const response: chatResponse[] = match.map(obj => { return { socketId: obj.socketId, displayName: obj.displayName, avatar: obj.avatar } })
@@ -37,7 +40,7 @@ io.on("connection", socket => {
       io.to(otherUsers).emit('found', resp);
     } else {
       io.to(socket.id).emit('subscribed', []);
-    };
+    }
   });
 
   socket.on('disconnect', () => {
