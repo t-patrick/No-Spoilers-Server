@@ -20,15 +20,15 @@ const paused: ChatRequest[] = [];
 const chats: ChatObject[] = [];
 
 io.on("connection", socket => {
+  console.log('a user connected');
   socket.on("request", newRequest => {
-    console.log('a user connected');
     newRequest.socketId = socket.id;
     const match = waiting.filter(chatRequest => chatRequest.showId === newRequest.showId && chatRequest.episodeId === newRequest.episodeId);
     const duplicate = waiting.filter(object => object.userId === newRequest.userId && object.showId === newRequest.showId)
     if (!duplicate) {
       waiting.push(newRequest);
     }
-    if (match) {
+    if (match.length > 0) {
       const response: chatResponse[] = match.map(obj => { return { socketId: obj.socketId, displayName: obj.displayName, avatar: obj.avatar } })
       io.to(socket.id).emit('subscribed', response);
       const otherUsers: string[] = match.map(obj => obj.socketId);
