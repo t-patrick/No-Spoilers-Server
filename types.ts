@@ -292,6 +292,7 @@ type ChatRequest = {
   episodeId: number;
   displayName: string;
   avatar: string;
+  showName: string;
 };
 
 type Chatter = {
@@ -300,6 +301,7 @@ type Chatter = {
   displayName: string;
   avatar: string;
   showId: number;
+  showName: string;
 };
 
 type Message = {
@@ -308,7 +310,6 @@ type Message = {
   displayName: string;
   avatar: string;
   message: string;
-  showName: string;
   showId: number;
   date: Date;
 };
