@@ -298,16 +298,18 @@ type ChatRequest = {
   avatar: string;
 };
 
-type chatResponse = {
+type Chatter = {
   socketId: string;
+  userId: string;
   displayName: string;
   avatar: string;
+  showId: number;
 };
 
-type ChatObject = {
-  roomID: string;
-  display1: string;
-  avatar1: string;
-  display2: string;
-  avatar2: string;
+type Message = {
+  receiverId: string;
+  displayName: string;
+  avatar: string;
+  message: string;
+  showId: number;
 };
