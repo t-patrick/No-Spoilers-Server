@@ -12,6 +12,30 @@ No Spoilers! is the tool you need in the modern world of non-stop streaming to a
 
 # Screenshots
 
+<p align="center">
+<img src="https://user-images.githubusercontent.com/70516815/161527818-2861012e-6fd9-4e0a-833f-0c73dbbabba9.png" width="800">
+</p>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/70516815/161526790-2bb1fa7b-1930-4492-8147-3fef02b5513c.png" width="800">
+</p>
+
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/70516815/161526913-fb98f654-e393-4b41-98b8-31fe8f37ee6d.png" width="800">
+</p>
+
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/70516815/161526905-71ba4a80-d870-4c38-bea9-c38f29626757.png" width="800">
+</p>
+
+
+
+
+
+
+
 # Getting Started
 
 # Installation
