@@ -15,6 +15,11 @@ const io = new Server(server, {
   },
 });
 
+app.use(cors());
+app.use(express.json());
+app.use(router);
+morgan('tiny');
+
 const waiting: ChatRequest[] = [];
 const paused: ChatRequest[] = [];
 const currentlyConnected: string[] = [];
@@ -23,6 +28,7 @@ io.on('connection', (socket) => {
   console.log('a user connected');
   currentlyConnected.push(socket.id);
   socket.on('request', (newRequest) => {
+    console.log(newRequest);
     newRequest.socketId = socket.id;
     const match = waiting.filter(
       (chatRequest) =>
@@ -38,7 +44,6 @@ io.on('connection', (socket) => {
       waiting.push(newRequest);
     }
 
-    console.log('match', match, 'waiting', waiting);
     if (match.length > 0) {
       const response: Chatter[] = match.map((obj) => {
         return {
@@ -49,6 +54,7 @@ io.on('connection', (socket) => {
           showId: obj.showId,
         };
       });
+      // console.log('response', response);
       io.to(socket.id).emit('subscribed', response);
       const otherUsers: string[] = match.map((obj) => obj.socketId);
       const resp: Chatter = {
@@ -58,6 +64,7 @@ io.on('connection', (socket) => {
         userId: newRequest.userId,
         showId: newRequest.showId,
       };
+      console.log('about to emit found with', resp);
       io.to(otherUsers).emit('found', resp);
     } else {
       io.to(socket.id).emit('subscribed', []);
@@ -81,13 +88,10 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected');
     currentlyConnected.splice(currentlyConnected.indexOf(socket.id), 1);
+    const cli = waiting.findIndex((client) => client.socketId === socket.id);
+    waiting.splice(cli);
   });
 });
-
-app.use(cors());
-app.use(express.json());
-app.use(router);
-morgan('tiny');
 
 server.listen(process.env.PORT, () => {
   console.log(`Listening on ${process.env.PORT}`);

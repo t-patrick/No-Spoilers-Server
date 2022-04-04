@@ -5,11 +5,12 @@ import UserTVShow from '../../models/user-tv-show';
 import Jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 dotenv.config();
-const TOKEN_SECRET: string = process.env.TOKEN_SECRET || 'needamoresecuresecret';
+const TOKEN_SECRET: string =
+  process.env.TOKEN_SECRET || 'needamoresecuresecret';
 
 const generateAccessToken = (id: string): string => {
   return Jwt.sign({ id: id }, TOKEN_SECRET, { expiresIn: 24 * 60 * 60 });
-}
+};
 
 const onLoadHome = async (email: string): Promise<User | undefined> => {
   try {
@@ -44,7 +45,9 @@ export const createUser = async (req: Request, res: Response) => {
     const user = await createDBUser(req.body);
     const result = await onLoadHome(req.body.email);
     if (!result) {
-      res.status(401).send('user or password is missing, or display name already exists');
+      res
+        .status(401)
+        .send('user or password is missing, or display name already exists');
     }
     res.status(201).send(result);
   } catch (e: any) {
@@ -55,6 +58,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const user = req.body;
     const data = await loginCheck(user);
     if (data === false || data === 'login credentials not found') {
