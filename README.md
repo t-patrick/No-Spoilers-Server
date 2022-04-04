@@ -31,14 +31,39 @@ No Spoilers! is the tool you need in the modern world of non-stop streaming to a
 </p>
 
 
-
-
-
-
-
 # Getting Started
 
+You will need the Client repo to run this app. This can be found [here](https://github.com/t-patrick/No-Spoilers-Client).
+
+You will need Node and MongoDB. You will also need a TMDB API key - you can learn about TMDB and register for a key [here](https://developers.themoviedb.org/3/getting-started/introduction).
+
 # Installation
+
+First clone both repos and enter the server:
+
+    git clone https://github.com/t-patrick/No-Spoilers-Server.git
+    git clone https://github.com/t-patrick/No-Spoilers-Client.git
+    cd server
+    npm i
+
+To populate the TV-Show-Snippets database run
+   
+    node./dist/trending-database.js
+    
+To finish connecting back-end dependencies, ensure your MongoDB is up and running, and create a .env file with the following information
+
+    SERVER_PORT = Your port of choice
+    SECRETKEY = A random string of letters and numbers for encryption
+    DB_URL = Your MongoDB localhost or similar url
+    DB_NAME = Your database name
+    API_KEY = Your TMDB API key
+    
+Then 
+
+    npm start
+    
+Next, check the Client repo readme for information on installation of the app.
+
 
 # Tech Stack
 React with Redux, Node.js with Express, TypeScript, Socket.IO, MongoDB with Mongoose, JWT, TMDB API and Wayback Machine API.
